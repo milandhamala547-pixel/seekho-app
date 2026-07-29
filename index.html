@@ -1,1 +1,1343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>Seekho — Learn AI, Code & Money</title>
+<meta name="theme-color" content="#12213F">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Seekho">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#12213F; --ink-2:#1B2E52; --ink-3:#233A63;
+    --gold:#FFB627; --teal:#2EC4B6; --rose:#F2637B; --violet:#B39CFF;
+    --text:#F1EFE6; --muted:#9FAAC7; --line:rgba(241,239,230,0.10); --radius:18px;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;height:100%;}
+  body{background:var(--ink); color:var(--text); font-family:'Inter',sans-serif; display:flex; justify-content:center; min-height:100vh;}
+  #shell{width:100%; max-width:480px; min-height:100vh; display:flex; flex-direction:column; position:relative;
+    background:radial-gradient(600px 300px at 100% -10%, rgba(255,182,39,0.10), transparent 60%),
+      radial-gradient(500px 260px at -10% 0%, rgba(46,196,182,0.08), transparent 55%), var(--ink);}
+  h1,h2,h3{font-family:'Fraunces',serif; margin:0; letter-spacing:-0.01em;}
+  code,.mono{font-family:'IBM Plex Mono',monospace;}
+  ::selection{background:var(--gold); color:var(--ink);}
+  @media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important;} }
+
+  header.topbar{padding:22px 20px 14px; display:flex; align-items:center; justify-content:space-between;}
+  .brand{display:flex; align-items:center; gap:10px;}
+  .brand-mark{width:34px;height:34px;border-radius:9px; background:linear-gradient(155deg,var(--gold),#d98f12);
+    display:flex;align-items:center;justify-content:center; font-family:'Fraunces',serif; font-weight:700; color:var(--ink); font-size:17px;}
+  .brand-name{font-family:'Fraunces',serif; font-size:19px; font-weight:600;}
+  .brand-sub{font-size:11px; color:var(--muted); margin-top:-2px;}
+
+  main{flex:1; padding:4px 20px 100px; overflow-y:auto;}
+
+  .hero{padding:20px; margin-top:6px; margin-bottom:18px; border-radius:var(--radius);
+    background:linear-gradient(160deg, var(--ink-2), var(--ink-3)); border:1px solid var(--line); position:relative; overflow:hidden;}
+  .hero-eyebrow{font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:var(--gold); font-weight:700;}
+  .hero h1{font-size:25px; line-height:1.15; margin-top:8px; font-weight:600;}
+  .hero p{color:var(--muted); font-size:13.5px; margin-top:10px; line-height:1.5;}
+  .hero-stats{display:flex; gap:10px; margin-top:16px;}
+  .hero-stat{flex:1; background:rgba(255,255,255,0.05); border:1px solid var(--line); border-radius:12px; padding:10px; text-align:center;}
+  .hero-stat .n{font-family:'Fraunces',serif; font-size:19px; color:var(--gold); font-weight:600;}
+  .hero-stat .l{font-size:9.5px; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em; margin-top:2px;}
+
+  .section-label{font-size:12px; text-transform:uppercase; letter-spacing:0.12em; color:var(--muted); font-weight:700; margin:22px 2px 12px;}
+
+  .track-card{display:flex; align-items:center; gap:14px; padding:16px; border-radius:16px;
+    background:var(--ink-2); border:1px solid var(--line); margin-bottom:12px; cursor:pointer; transition:transform .15s ease;}
+  .track-card:active{transform:scale(0.98);}
+  .track-icon{width:46px;height:46px;border-radius:13px;flex:none; display:flex;align-items:center;justify-content:center; font-size:20px;}
+  .track-body{flex:1; min-width:0;}
+  .track-title{font-family:'Fraunces',serif; font-size:16.5px; font-weight:600;}
+  .track-desc{font-size:12px; color:var(--muted); margin-top:2px;}
+  .track-hours{font-size:10.5px; color:var(--muted); margin-top:6px; font-weight:600;}
+  .track-progress-wrap{margin-top:8px; height:5px; border-radius:4px; background:rgba(255,255,255,0.08); overflow:hidden;}
+  .track-progress-bar{height:100%; border-radius:4px;}
+  .chev{color:var(--muted); font-size:18px; flex:none;}
+
+  .backrow{display:flex; align-items:center; gap:10px; margin:16px 0 6px; cursor:pointer;}
+  .backrow .arrow{font-size:18px; color:var(--gold);}
+  .backrow .label{font-size:13px; color:var(--muted); font-weight:600;}
+  .track-header{padding:6px 2px 8px;}
+  .track-header h2{font-size:24px;}
+  .track-header p{color:var(--muted); font-size:13px; margin-top:6px; line-height:1.5;}
+  .track-header .hourline{font-size:11.5px; color:var(--gold); font-weight:700; margin-top:10px;}
+
+  .module-label{font-size:12.5px; font-weight:700; color:var(--text); margin:20px 2px 10px; display:flex; align-items:center; gap:8px;}
+  .module-label .badge{font-size:9.5px; color:var(--muted); font-weight:600; background:rgba(255,255,255,0.06); padding:2px 7px; border-radius:20px;}
+
+  .lesson-row{display:flex; align-items:center; gap:14px; padding:15px; border-radius:14px;
+    background:var(--ink-2); border:1px solid var(--line); margin-bottom:10px; cursor:pointer;}
+  .lesson-num{width:34px;height:34px;border-radius:50%; flex:none; display:flex;align-items:center;justify-content:center;
+    font-family:'IBM Plex Mono',monospace; font-size:13px; font-weight:600; border:1.5px solid var(--line); color:var(--muted);}
+  .lesson-num.done{background:var(--gold); border-color:var(--gold); color:var(--ink);}
+  .lesson-title{font-size:14.5px; font-weight:600;}
+  .lesson-time{font-size:11px; color:var(--muted); margin-top:2px;}
+
+  .lesson-eyebrow{font-size:11px; color:var(--gold); text-transform:uppercase; letter-spacing:0.1em; font-weight:700;}
+  .lesson-content h2{font-size:22px; margin-top:8px; line-height:1.2;}
+  .lesson-content .body{margin-top:16px; font-size:14.5px; line-height:1.7; color:#DDE1EC;}
+  .lesson-content .body p{margin:0 0 14px;}
+  .lesson-content .body strong{color:var(--gold);}
+  .codeblock{background:#0D1830; border:1px solid var(--line); border-radius:12px; padding:14px;
+    font-family:'IBM Plex Mono',monospace; font-size:12px; color:#8FE3CF; margin:14px 0; overflow-x:auto; white-space:pre;}
+  .callout{background:rgba(255,182,39,0.08); border:1px solid rgba(255,182,39,0.25); border-radius:12px; padding:13px 14px; font-size:13px; margin:16px 0; color:#F3E3B8;}
+  .exercise{background:rgba(46,196,182,0.08); border:1.5px solid rgba(46,196,182,0.3); border-radius:12px; padding:15px; margin:18px 0; color:#DDF6F3;}
+  .exercise .ex-label{font-size:11px; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; color:var(--teal); margin-bottom:8px; display:flex; align-items:center; gap:6px;}
+  .exercise p{margin:0 0 8px; font-size:13.5px; line-height:1.6;}
+  .exercise p:last-child{margin-bottom:0;}
+  .btn{display:block; width:100%; text-align:center; padding:15px; border-radius:14px; border:none;
+    font-family:'Inter',sans-serif; font-weight:700; font-size:14.5px; background:var(--gold); color:var(--ink); cursor:pointer; margin-top:18px;}
+  .btn:active{transform:scale(0.98);}
+  .btn.secondary{background:transparent; border:1.5px solid var(--line); color:var(--text);}
+
+  .quiz-progress{font-size:12px; color:var(--muted); font-weight:600; margin-bottom:10px;}
+  .quiz-q{font-family:'Fraunces',serif; font-size:19px; line-height:1.3; margin-bottom:18px;}
+  .option{display:block; width:100%; text-align:left; padding:14px 15px; border-radius:13px; margin-bottom:10px;
+    background:var(--ink-2); border:1.5px solid var(--line); color:var(--text); font-size:14px; font-family:'Inter',sans-serif; cursor:pointer;}
+  .option.correct{border-color:var(--teal); background:rgba(46,196,182,0.12);}
+  .option.wrong{border-color:var(--rose); background:rgba(242,99,123,0.12);}
+  .option:disabled{opacity:0.75;}
+
+  .result-stamp{text-align:center; padding:30px 10px 10px;}
+  .stamp-circle{width:110px;height:110px;border-radius:50%; margin:0 auto 18px; border:3px solid var(--gold);
+    display:flex; align-items:center; justify-content:center; flex-direction:column; transform:rotate(-6deg); font-family:'Fraunces',serif;}
+  .stamp-circle .score{font-size:30px; font-weight:700; color:var(--gold);}
+  .stamp-circle .of{font-size:11px; color:var(--muted);}
+
+  .passport-head{padding:8px 2px 4px;}
+  .passport-head h2{font-size:24px;}
+  .passport-head p{color:var(--muted); font-size:13px; margin-top:6px;}
+  .roadmap-bar{margin-top:16px; background:var(--ink-2); border:1px solid var(--line); border-radius:14px; padding:14px;}
+  .roadmap-bar .row{display:flex; justify-content:space-between; font-size:12px; margin-bottom:6px;}
+  .roadmap-bar .track-mini{height:6px; border-radius:4px; background:rgba(255,255,255,0.07); overflow:hidden; margin-bottom:12px;}
+  .roadmap-bar .track-mini > div{height:100%;}
+  .stamp-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:18px;}
+  .stamp-tile{aspect-ratio:1; border-radius:14px; border:1.5px dashed var(--line); display:flex; align-items:center; justify-content:center;
+    flex-direction:column; gap:4px; font-size:9.5px; text-align:center; padding:6px; color:var(--muted);}
+  .stamp-tile.earned{border-style:solid; border-color:var(--gold); background:rgba(255,182,39,0.08); color:var(--text);}
+  .stamp-tile .emoji{font-size:19px;}
+
+  nav.tabbar{position:sticky; bottom:0; left:0; right:0; display:flex; background:rgba(18,33,63,0.92); backdrop-filter:blur(10px);
+    border-top:1px solid var(--line); padding:10px 10px calc(10px + env(safe-area-inset-bottom));}
+  .tab{flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; background:none; border:none; color:var(--muted);
+    font-family:'Inter',sans-serif; font-size:10.5px; font-weight:600; cursor:pointer; padding:6px 0;}
+  .tab.active{color:var(--gold);}
+  .tab .icon{font-size:19px;}
+</style>
+</head>
+<body>
+<div id="shell">
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">S</div>
+      <div><div class="brand-name">Seekho</div><div class="brand-sub">Learn it here. Free, forever.</div></div>
+    </div>
+  </header>
+  <main id="app"></main>
+  <nav class="tabbar">
+    <button class="tab" data-tab="home"><span class="icon">⌂</span>Home</button>
+    <button class="tab" data-tab="learn"><span class="icon">▤</span>Learn</button>
+    <button class="tab" data-tab="progress"><span class="icon">✦</span>Passport</button>
+  </nav>
+</div>
+
+<script>
+/* =================================================================
+   CONTENT — authored once, shown for free, no API keys, no cost.
+   Every lesson below is real and openable any time, in any order.
+================================================================= */
+const TRACKS = {
+
+  ai: {
+    title:"AI Tools", icon:"✦", color:"#FFB627", bg:"rgba(255,182,39,0.14)",
+    desc:"Chat AI, research AI, image & voice AI, coding assistants, automation, and advanced AI workflows.",
+    modules:[
+      { title:"AI Foundations", lessons:[
+        { id:"ai1", title:"What AI actually is (no jargon)", time:"15 min", hours:0.25, body:`
+          <p>Forget the sci-fi robots. Today's "AI" mostly means one thing: a computer program that has read an enormous amount of text, images, or sound, and learned patterns from it well enough to <strong>predict what comes next</strong>.</p>
+          <p>When you type a question into ChatGPT or Claude, the program isn't "looking it up" — it's predicting, word by word, the most likely helpful reply based on everything it learned. This kind of AI is called a <strong>Large Language Model</strong>, or <strong>LLM</strong>.</p>
+          <p>Think of the autocomplete on your phone keyboard, the one that guesses your next word while texting. An LLM is that same basic idea — scaled up from guessing one word to writing whole paragraphs, using patterns learned from a huge slice of the internet, books, and other text.</p>
+          <p>That's it. No magic. Once you understand "it predicts patterns," a lot of its strange behavior starts to make sense — including <strong>hallucination</strong>, where an AI states something false with total confidence. It's not lying on purpose; it's predicting what a plausible-sounding answer looks like, and sometimes that prediction is simply wrong.</p>
+          <div class="callout">💡 Rule of thumb: treat AI like a very well-read assistant who sometimes guesses. Always double-check facts that matter — dates, numbers, medicine, law.</div>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Open ChatGPT or Claude. Ask it a question you already know the answer to (your city's population, a well-known historical date, a fact about your field). Check if it's correct.</p>
+          <p>Then ask something more obscure — a small, specific detail you're not sure it would know. See if you can catch it sounding confident but being wrong, or notice it correctly admitting uncertainty. This is the fastest way to build a real gut feeling for when to trust AI and when to double-check.</p></div>`,
+          quiz:[
+            {q:"What does an LLM (like ChatGPT or Claude) actually do?", options:["Searches the internet live for every answer","Predicts the most likely next words based on patterns it learned","Connects to a human who types the answer","Only works with pre-written scripts"], a:1},
+            {q:"What is a 'hallucination' in AI?", options:["A visual glitch on screen","The AI stating something false with confident, plausible-sounding language","A type of virus","A slow response time"], a:1},
+            {q:"Why should you double-check facts an AI gives you?", options:["AI never makes mistakes","AI can sound confident even when it's wrong","AI only answers in numbers","You should never trust AI at all"], a:1},
+          ]},
+        { id:"ai2", title:"Chat assistants: ChatGPT & Claude", time:"20 min", hours:0.33, body:`
+          <p><strong>ChatGPT</strong> (by OpenAI) and <strong>Claude</strong> (by Anthropic) are chat-based AI assistants. Both have free versions you can use with just an email sign-up — no payment needed.</p>
+          <p>What they're genuinely useful for: explaining a topic simply, checking your grammar, planning a study schedule, debugging code, writing a resume, practicing interview questions, or translating something.</p>
+          <p>They're built on the same underlying idea — an LLM predicting helpful text — but each has its own tuning and "personality." Neither is objectively better for everything; people often find one explains certain topics more clearly, or one writes in a tone they prefer. The only way to know which fits you is to try both on something real.</p>
+          <p>The skill that matters most is <strong>how you ask</strong> — this is called "prompting." A weak prompt: <em>"explain stocks."</em> A strong prompt: <em>"Explain what a stock is to a complete beginner, using one simple real-life example, in under 100 words."</em></p>
+          <div class="callout">💡 Good prompts give three things: what you want, who it's for, and how long/detailed the answer should be.</div>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Open ChatGPT and Claude (or one after the other if you only have one open). Ask both the <strong>exact same question</strong> — something you're actually curious about right now. Compare: which explanation felt clearer? Did they agree on the facts? Keep whichever answer was more useful to you.</p></div>`,
+          quiz:[
+            {q:"What is 'prompting'?", options:["Paying for AI access","How you phrase your question to get a better answer","A type of coding language","A subscription plan"], a:1},
+            {q:"Which is a stronger prompt?", options:["\"explain stocks\"","\"Explain what a stock is to a beginner, with one example, in under 100 words\"","\"stocks??\"","\"tell me everything\""], a:1},
+            {q:"Do you need to pay to use ChatGPT or Claude?", options:["Yes, always","No — both offer free versions to start","Only on weekends","Only if you're a student"], a:1},
+          ]},
+        { id:"ai3", title:"NotebookLM, Nanobanana & ElevenLabs", time:"25 min", hours:0.42, body:`
+          <p><strong>NotebookLM</strong> (by Google, free) turns your own notes, PDFs, or articles into summaries, study guides, quiz questions, and even a spoken "podcast" conversation explaining them in two AI voices. Its key trick: it only answers from the material you gave it, so it won't wander off and make things up from the wider internet — genuinely useful for exam prep from your own class notes.</p>
+          <p><strong>Nanobanana</strong> is the nickname people use for Google's fast AI image-generation model. Describe a picture in words, and it creates one — useful for posters, presentation visuals, or design mockups without design skills. It can also edit an existing photo based on instructions, like "remove the background" or "make this look like a watercolor painting."</p>
+          <p><strong>ElevenLabs</strong> turns typed text into realistic spoken audio, and can also transcribe speech to text. People use it for voice-overs on videos, turning written lessons into audio to listen to while commuting, or even narrating an audiobook draft.</p>
+          <div class="callout">💡 All three have free tiers with limits. Use free credits deliberately — plan what you'll generate before you start, rather than experimenting randomly.</div>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Pick ONE of the three. If you have any notes or a PDF, upload it to NotebookLM and ask it a specific question about that content. Or open Nanobanana (or ChatGPT's built-in image tool) and generate one image from a clearly written description. Notice how much the result depends on how specific your instructions were.</p></div>`,
+          quiz:[
+            {q:"What makes NotebookLM different from a normal chatbot?", options:["It only answers using the documents you give it","It only works offline","It requires a paid API key","It only generates images"], a:0},
+            {q:"Nanobanana is mainly used for:", options:["Text-to-speech voice-overs","Generating images from text descriptions","Writing code","Stock trading"], a:1},
+            {q:"ElevenLabs is best known for:", options:["Image generation","Spreadsheet formulas","Realistic AI voice/audio from text","Video editing"], a:2},
+          ]},
+      ]},
+      { title:"Search & Research AI", lessons:[
+        { id:"ai4", title:"Perplexity & Gemini — AI that searches for you", time:"20 min", hours:0.33, body:`
+          <p>Regular chat AI answers from what it learned during training, which has a cutoff date — ask it about something from last week and it may simply not know, or worse, guess. <strong>Perplexity</strong> and Google's <strong>Gemini</strong> are built to actively search the live web and cite sources while answering — closer to a research assistant than a chatbot.</p>
+          <p>Use these when you need <strong>current information</strong>: today's news, this week's prices, a recent event, or anything time-sensitive. Always glance at the cited sources before trusting a specific number or claim — a good research AI shows its work, and that's exactly what makes it trustworthy or not.</p>
+          <div class="callout">💡 Use chat AI (ChatGPT/Claude) for explaining and reasoning. Use search AI (Perplexity/Gemini) for "what's happening right now."</div>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Ask Perplexity or Gemini a question about something happening this week — news, a price, a local event. Open one of the sources it cites and confirm it's a real, relevant page, not just a plausible-looking link.</p></div>`,
+          quiz:[
+            {q:"Why would you use Perplexity instead of a regular chatbot?", options:["It's always free forever","It actively searches the live web and cites sources","It only works for coding","It never makes mistakes"], a:1},
+            {q:"When is search-style AI most useful?", options:["For timeless facts like historical dates","For current/time-sensitive information","For writing poetry only","It's never useful"], a:1},
+          ]},
+      ]},
+      { title:"Creating with AI", lessons:[
+        { id:"ai5", title:"Image AI compared: Nanobanana, Midjourney, DALL-E", time:"20 min", hours:0.33, body:`
+          <p><strong>Nanobanana (Google)</strong> — fast, great at following detailed instructions precisely, good for editing existing images too. Free tier available.</p>
+          <p><strong>DALL-E (OpenAI, inside ChatGPT)</strong> — easy to use if you already use ChatGPT, solid general-purpose quality.</p>
+          <p><strong>Midjourney</strong> — known for the most artistic, polished-looking results, but historically has no meaningful free tier — it's paid-only, so it's the one to skip if you're budget-conscious.</p>
+          <p>A simple formula for a strong prompt: <strong>subject + style + mood/lighting + specific details</strong>. "A watercolor painting of a busy Mumbai street at golden-hour sunset, warm colors, gentle brush strokes" will beat "nice picture" every time.</p>
+          <div class="callout">💡 Never use AI image tools to generate images of real people without their consent, or to create misleading "fake photos."</div>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Generate one image using Nanobanana or ChatGPT's image tool with a full descriptive prompt (subject + style + mood). Then generate a second one from just a single vague word. Compare the two — notice exactly what the extra detail bought you.</p></div>`,
+          quiz:[
+            {q:"Which of these is generally paid-only with no meaningful free tier?", options:["Nanobanana","DALL-E inside ChatGPT","Midjourney","None of them"], a:2},
+            {q:"What makes an image prompt effective?", options:["Being vague so the AI can be creative","Describing subject, style, and mood clearly","Using only one word","Never describing color"], a:1},
+          ]},
+      ]},
+      { title:"AI for Coders", lessons:[
+        { id:"ai6", title:"GitHub Copilot, Cursor & Claude Code", time:"20 min", hours:0.33, body:`
+          <p><strong>GitHub Copilot</strong> autocompletes as you type. <strong>Cursor</strong> is a full code editor built around AI, letting you describe a feature in plain English and get real code changes. <strong>Claude Code</strong> works from your command line, able to read your whole project and make multi-file changes, run commands, and fix errors on its own.</p>
+          <p>There's a real difference between asking an AI to <strong>write</strong> code for you versus asking it to <strong>explain</strong> code that already exists. For a true beginner, lean on the "explain" mode much more at first — you learn far faster by understanding what's happening line by line than by only copy-pasting output you don't fully follow.</p>
+          <div class="callout">💡 A good habit while learning: ask the AI to add comments explaining each line, and don't move on until you could explain it back in your own words.</div>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Paste a short snippet of code — or the Python example from the Coding track's first lesson — into ChatGPT or Claude and ask it to explain what every single line does. Try to predict the explanation before reading it.</p></div>`,
+          quiz:[
+            {q:"What's the risk of relying fully on AI coding tools as a total beginner?", options:["There is no risk","You may not actually learn how the code works", "AI coding tools cost money always","They only work with Java"], a:1},
+            {q:"Which of these can read an entire project and make multi-file changes from the command line?", options:["GitHub Copilot only","Claude Code","Neither can do this","Only Cursor"], a:1},
+          ]},
+      ]},
+      { title:"Automation & Agents", lessons:[
+        { id:"ai7", title:"Zapier, n8n & the idea of 'AI agents'", time:"20 min", hours:0.33, body:`
+          <p><strong>Automation tools</strong> like Zapier and n8n connect apps together so tasks happen without you doing them manually. A classic example: "when someone fills out my Google Form, automatically add their info to a spreadsheet and send them a welcome email" — all without you touching anything after setup. Zapier is easier for beginners; n8n is free and open-source but needs a bit more setup.</p>
+          <p>An <strong>AI agent</strong> takes this further: instead of a fixed set of steps, you give an AI a goal — like "research three suppliers for X and email me a comparison" — and it decides which actions to take, in what order, sometimes using tools on its own to get there.</p>
+          <div class="callout">💡 Agents are powerful but new and imperfect — always review what an agent did before trusting the output for anything important.</div>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Without building anything yet, write down (on paper or in a notes app) one repetitive task in your life you'd want automated: what should trigger it, and what should happen automatically afterward. This is exactly the thinking Zapier/n8n setup requires.</p></div>`,
+          quiz:[
+            {q:"What does an automation tool like Zapier do?", options:["Writes essays for you","Connects apps so tasks happen automatically without manual work","Only works for stock trading","Replaces your email entirely"], a:1},
+            {q:"What makes an 'AI agent' different from a simple automation?", options:["Nothing, they're identical","An agent can decide its own steps toward a goal, not just follow a fixed sequence","Agents only work offline","Agents cannot use any tools"], a:1},
+          ]},
+      ]},
+      { title:"AI Safety & Literacy", lessons:[
+        { id:"ai8", title:"Spotting AI fakes & using AI responsibly", time:"20 min", hours:0.33, body:`
+          <p>As AI image, voice, and video tools improve, "deepfakes" — realistic fake media of real people — are becoming easier to create and harder to spot. Warning signs: unnatural blinking or hands in images/video, voices that sound slightly flat or robotic under stress, and claims that seem designed to provoke strong emotion quickly.</p>
+          <p>Before trusting or sharing something surprising: check if reputable news outlets are also reporting it, and consider that AI-generated content is now cheap and easy to produce at scale.</p>
+          <p>On the flip side, using AI responsibly means: not passing off AI-written work as fully your own without disclosure where it matters (school, job applications), not generating fake images of real people, and being transparent when content is AI-assisted.</p>
+          <div class="callout">💡 A simple personal rule: if an AI's output could hurt someone's reputation, finances, or safety if wrong, verify it independently before acting or sharing.</div>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Find (or generate) a piece of AI-made content — an image is easiest. List 2-3 specific visual details that give it away as AI-generated, rather than just saying "it looks off."</p></div>`,
+          quiz:[
+            {q:"What is a 'deepfake'?", options:["A type of programming bug","Realistic AI-generated fake media of a real person","A slow internet connection","A kind of stock chart"], a:1},
+            {q:"Before trusting a surprising AI-related claim, what's a good habit?", options:["Share it immediately","Check if reputable sources are also reporting it","Assume it must be true","Ignore all AI content forever"], a:1},
+          ]},
+      ]},
+      { title:"Advanced AI Workflows & No-Code AI Apps", lessons:[
+        { id:"aw1", title:"Chaining prompts for complex tasks", time:"20 min", hours:0.33, body:`
+          <p>Complex tasks often need more than one prompt. <strong>Chaining</strong> means feeding one AI response into the next prompt as input, breaking a big job into steps: research → outline → draft → refine.</p>
+          <p>Example: "Generate a market analysis for a tea stall business" → feed that into "Now write a marketing strategy based on this analysis" → feed both into "Now summarize this into a one-page executive summary." Each step gets a focused, simpler job than trying to do everything in one giant prompt.</p>
+          <div class="callout">💡 If an answer feels shallow, it's often not that the AI "can't" do better — it's that the task needed to be broken into more steps.</div>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Pick a real task you have — even something small, like planning a get-together. Write a 3-step prompt chain: a research prompt, then a plan prompt, then a summary prompt. Run all three in order in ChatGPT or Claude.</p></div>`,
+          quiz:[
+            {q:"What does 'chaining prompts' mean?", options:["Asking the same question repeatedly","Feeding one AI response into the next prompt as input, step by step","Using two AI tools at the same time for no reason","A way to make AI faster"], a:1},
+            {q:"Why break a big task into a prompt chain?", options:["It's required by law","Each step gets a focused, simpler job, usually improving results","It uses less electricity","It's not actually useful"], a:1},
+          ]},
+        { id:"aw2", title:"Build a simple AI app with no code", time:"25 min", hours:0.42, body:`
+          <p>No-code builders like <strong>Bubble</strong> and <strong>Glide</strong> let you build real, working apps — forms, buttons, databases — by dragging and arranging elements instead of writing code.</p>
+          <p>Many of these tools let you connect an AI service through built-in "plugins" or "integrations," so your app can, for example, automatically summarize whatever a user types into a form, or generate a personalized reply.</p>
+          <p>Start small: build a single-page app with one form and one AI-powered action, then expand from there once it works. Trying to build everything at once is the most common reason beginners abandon a no-code project halfway.</p>
+          <div class="callout">💡 Free tiers are generous for personal projects; costs usually only appear once you have real paying users at scale.</div>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Visit Bubble.io or Glide's website (free to browse, no sign-up needed to look) and check their template gallery. Find one template closest to an app idea you have, and note down what features it already includes.</p></div>`,
+          quiz:[
+            {q:"What do no-code tools like Bubble and Glide let you do?", options:["Only write raw code faster","Build real working apps by dragging and arranging elements, no code required","Only build games","Nothing useful for beginners"], a:1},
+            {q:"What's a smart way to start a no-code AI app?", options:["Build every feature at once","Start with one form and one AI-powered action, then expand","Skip testing entirely","Avoid AI integrations"], a:1},
+          ]},
+        { id:"aw3", title:"RAG — Retrieval-Augmented Generation, explained simply", time:"20 min", hours:0.33, body:`
+          <p>LLMs only "know" what they learned during training — they don't automatically know your private documents or very recent events. <strong>RAG (Retrieval-Augmented Generation)</strong> fixes this: before answering, the system first retrieves relevant chunks of text from a knowledge base (like your uploaded documents), and feeds them into the AI's prompt as extra context.</p>
+          <p>This is exactly what powers tools like NotebookLM — the AI isn't "remembering" your documents between sessions, it's being handed the relevant parts fresh, every single time you ask a question.</p>
+          <div class="callout">💡 If an AI tool says it can "answer from your files," it's almost certainly using RAG under the hood.</div>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Open NotebookLM, upload any document (even a short one), and ask it a question that's only answerable from that specific document — not something general knowledge could answer. Watch it quote back the relevant part.</p></div>`,
+          quiz:[
+            {q:"What problem does RAG solve?", options:["Making AI generate images","Letting AI answer accurately about private/specific documents it wasn't trained on","Making AI faster at math","Removing the need for prompts"], a:1},
+            {q:"What does RAG do before the AI answers?", options:["Nothing extra","Retrieves relevant text chunks and adds them as context to the prompt","Deletes the user's question","Trains a whole new AI model"], a:1},
+          ]},
+        { id:"aw4", title:"Fine-tuning vs. prompting", time:"15 min", hours:0.25, body:`
+          <p><strong>Prompting</strong> means giving better instructions and examples in your message — fast, free, no technical setup, and you can change it instantly. This is what most of this app has taught you.</p>
+          <p><strong>Fine-tuning</strong> means retraining the AI's actual internal settings on a specific dataset, permanently changing its default behavior — it requires data preparation, cost, and technical skill.</p>
+          <p>For everyday use, better prompting solves the vast majority of problems. Fine-tuning is mainly for specialized company or product-level use cases where the same behavior needs to happen automatically, at scale, without a custom prompt every time.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Think of one task you do with AI regularly that doesn't quite work the way you want. Write down: could a better <strong>prompt</strong> fix it? For almost everyone, the honest answer is yes.</p></div>`,
+          quiz:[
+            {q:"Which is faster and free, requiring no technical setup?", options:["Fine-tuning","Prompting","Neither","Both equally"], a:1},
+            {q:"When would fine-tuning make sense over prompting?", options:["For every single everyday task","For specialized company/product use cases needing permanent, deep customization","Never, it's pointless","Only for image generation"], a:1},
+          ]},
+        { id:"aw5", title:"AI for data analysis in spreadsheets", time:"20 min", hours:0.33, body:`
+          <p>Tools like ChatGPT and Claude can read an uploaded spreadsheet or CSV file and write/run code behind the scenes to analyze it — no need to learn a data language first.</p>
+          <p>Example prompt: <em>"Here is my expenses CSV. Show me my top 5 spending categories and describe the monthly trend."</em> The AI will process the file and explain the findings in plain language, often alongside a chart.</p>
+          <div class="callout">💡 For decisions that matter (taxes, big purchases), spot-check a few of the AI's numbers manually against the raw data before trusting them fully.</div>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>If you have any spreadsheet or CSV handy, upload it to ChatGPT or Claude and ask for a summary of trends. If you don't have one, ask the AI to first create a small sample expenses CSV, then analyze it for you.</p></div>`,
+          quiz:[
+            {q:"What can you do by uploading a CSV to a chat AI?", options:["Nothing, it only reads text","Ask it to analyze and summarize the data, often with charts","Automatically invest your money","Convert it to a video"], a:1},
+            {q:"Why spot-check AI's data analysis for important decisions?", options:["It's unnecessary","AI can make mistakes, especially on numbers that matter","AI cannot read spreadsheets at all","It's illegal not to"], a:1},
+          ]},
+        { id:"aw6", title:"Choosing the right AI tool — a decision guide", time:"15 min", hours:0.25, body:`
+          <p>A simple mental checklist: Need to explain, write, or reason through something? → <strong>Chat AI</strong> (ChatGPT/Claude). Need current, live information? → <strong>Search AI</strong> (Perplexity/Gemini). Need an image? → <strong>Nanobanana/DALL-E</strong>. Need voice/audio? → <strong>ElevenLabs</strong>. Need to study your own documents? → <strong>NotebookLM</strong>. Need coding help? → <strong>Copilot/Cursor/Claude Code</strong>. Need repetitive tasks automated? → <strong>Zapier/n8n/agents</strong>.</p>
+          <div class="callout">💡 Most of these have free tiers — the fastest way to learn which tool fits a task is to just try the closest match and see.</div>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Write down 3 tasks you did this week. For each, identify which AI tool category from this checklist would have been the best fit — and whether you actually used the right one.</p></div>`,
+          quiz:[
+            {q:"You need today's news summarized with sources. Which type of tool fits best?", options:["Image AI","Search AI (like Perplexity/Gemini)","Voice AI","Automation tool"], a:1},
+            {q:"You want to ask questions about your own uploaded class notes only. Best fit?", options:["Midjourney","NotebookLM","Zapier","GitHub Copilot"], a:1},
+          ]},
+      ]},
+    ]
+  },
+
+  code: {
+    title:"Coding", icon:"⌘", color:"#2EC4B6", bg:"rgba(46,196,182,0.14)",
+    desc:"A real path from zero to shipping your own runnable apps — Python, HTML/CSS/JS, Java, C++, Git and databases.",
+    modules:[
+      { title:"Foundations", lessons:[
+        { id:"c1", title:"Which language should you learn first?", time:"15 min", hours:0.25, body:`
+          <p>You mentioned Python, HTML, C++ and Java — here's what each is actually for:</p>
+          <p><strong>Python</strong> — general purpose, reads almost like English, used for AI, automation, data analysis. Best <strong>first language</strong> for beginners.</p>
+          <p><strong>HTML/CSS</strong> — structure and style webpages. Learn alongside a bit of JavaScript to build your first working website.</p>
+          <p><strong>Java</strong> — used heavily in large company software and Android apps. More strict/verbose than Python, good second language.</p>
+          <p><strong>C++</strong> — used where speed matters most: games, operating systems, hardware. Steeper learning curve — usually a third language, not a first.</p>
+          <p>None of this is wasted effort, by the way — once you understand programming concepts (variables, loops, functions) in one language, picking up a second and third is far faster, because you're mostly learning new syntax for ideas you already know.</p>
+          <div class="callout">💡 Suggested order: Python (deep) → HTML/CSS/JS (deep) → Java → C++ → Git/GitHub → Databases.</div>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Write down, in your own words, one thing you'd actually want to build (an app, a website, a game, a tool for your own life). Circle which language from this lesson fits that idea best — this becomes your motivation anchor for the rest of this track.</p></div>`,
+          quiz:[
+            {q:"Which is generally the best first programming language for beginners?", options:["C++","Python","Java","HTML"], a:1},
+            {q:"HTML is technically:", options:["A programming language for AI","A markup language that structures webpages","A database","A version of Python"], a:1},
+            {q:"C++ is most often chosen when:", options:["You want the simplest possible syntax","Speed and hardware control matter most (games, systems)","You're building a basic website","You're a total beginner"], a:1},
+          ]},
+      ]},
+      { title:"Python: Zero to App", lessons:[
+        { id:"p1", title:"Installing Python & running your first file", time:"20 min", hours:0.33, body:`
+          <p>To write real, runnable programs (not just an online playground), install Python on your own computer:</p>
+          <p><strong>Windows:</strong> go to python.org/downloads, download the installer, and — important — tick "Add Python to PATH" during install.<br>
+          <strong>Mac:</strong> check by opening Terminal and typing <code>python3 --version</code>. If missing, download from python.org.<br>
+          <strong>Android:</strong> apps like Pydroid 3 let you write and run Python directly on a phone.</p>
+          <div class="codeblock">print("Hello, world!")</div>
+          <p>Save this as <code>hello.py</code>, then run <code>python hello.py</code> (or <code>python3 hello.py</code> on Mac/Linux) in a terminal opened in that folder.</p>
+          <div class="callout">💡 "python.org" is the only official source — never download Python from a random third-party site.</div>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Actually install Python right now (or open Pydroid 3 on your phone). Create <code>hello.py</code>, type the line above exactly, and run it. Then change the text inside the quotes to something of your own and run it again — that's your first edit-and-rerun cycle, the loop you'll repeat thousands of times as a programmer.</p></div>`,
+          quiz:[
+            {q:"What must you tick during Windows installation to run Python from any folder?", options:["'Add Python to PATH'","'Enable dark mode'","'Install for all games'","Nothing, it's automatic"], a:0},
+            {q:"What command runs a file named hello.py?", options:["run hello.py","python hello.py","open hello.py","start hello.py"], a:1},
+            {q:"What app lets you code Python directly on Android?", options:["Pydroid 3","Photoshop","Excel","Zoom"], a:0},
+          ]},
+        { id:"p2", title:"Variables & data types", time:"20 min", hours:0.33, body:`
+          <p>A <strong>variable</strong> stores a value with a name you choose:</p>
+          <div class="codeblock">age = 22
+name = "Priya"
+height = 5.4
+is_student = True</div>
+          <p>Python has core data types: <strong>int</strong> (whole numbers), <strong>float</strong> (decimals), <strong>str</strong> (text, in quotes), and <strong>bool</strong> (True/False).</p>
+          <div class="codeblock">print(f"{name} is {age} years old.")</div>
+          <p>Try changing the values and re-running the file — this is the fastest way to build intuition. Notice that mixing types incorrectly (like adding a number to a piece of text directly) causes an error — Python cares about type, even though you don't have to declare it upfront like some other languages.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>In a new file, create four variables about yourself: your name (str), your age (int), your height in some unit (float), and whether you're currently a student (bool). Print a full sentence using an f-string combining all four.</p></div>`,
+          quiz:[
+            {q:"Which data type is 5.4?", options:["int","float","str","bool"], a:1},
+            {q:"What does 'True' represent in Python?", options:["A string","A boolean value","A float","An error"], a:1},
+            {q:"What does an f-string let you do?", options:["Delete variables","Insert variable values directly inside text", "Only print numbers","Run loops faster"], a:1},
+          ]},
+        { id:"p3", title:"Control flow: if / else", time:"20 min", hours:0.33, body:`
+          <div class="codeblock">balance = 500
+
+if balance &gt; 1000:
+    print("You can invest some of this.")
+elif balance &gt; 0:
+    print("Keep saving before you invest.")
+else:
+    print("Balance is empty.")</div>
+          <p>Python checks conditions top to bottom and runs the first block that's true. Notice the <strong>indentation</strong> (4 spaces) — Python uses spacing, not curly braces, to know what's inside each block. Get the indentation wrong and the code will error or behave unexpectedly — this trips up almost every beginner at least once, so don't worry if it happens to you.</p>
+          <div class="callout">💡 Comparison operators: == (equal to), != (not equal), &gt;, &lt;, &gt;=, &lt;=.</div>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Change the <code>balance</code> value to three different numbers (negative, small positive, and large) and run the file each time, confirming the right message prints for each case. Then add a fourth condition of your own — like a special message if balance is exactly 0.</p></div>`,
+          quiz:[
+            {q:"What does Python use to define what's inside an if-block?", options:["Curly braces {}","Indentation (spacing)","Semicolons","Nothing needed"], a:1},
+            {q:"What does == mean in Python?", options:["Assign a value","Check if two things are equal","Add two numbers","Not equal"], a:1},
+            {q:"If the first 'if' condition is False, what happens next?", options:["The program stops","Python checks the next elif or else", "Nothing runs at all","It repeats the if forever"], a:1},
+          ]},
+        { id:"p4", title:"Loops: doing things again and again", time:"20 min", hours:0.33, body:`
+          <div class="codeblock">for i in range(1, 4):
+    print("Lesson", i, "complete!")
+
+fruits = ["mango", "banana", "apple"]
+for fruit in fruits:
+    print(fruit)</div>
+          <p>A <strong>while loop</strong> repeats as long as a condition stays true — useful when you don't know exactly how many times you'll repeat:</p>
+          <div class="codeblock">savings = 0
+while savings &lt; 1000:
+    savings += 200
+    print("Savings now:", savings)</div>
+          <div class="callout">💡 Careful with while loops — if the condition never becomes false, your program runs forever. This is called an "infinite loop."</div>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Write a for loop that prints the numbers 1 to 10, but only prints the even ones (hint: use <code>if number % 2 == 0</code> inside the loop). Then write a while loop that counts down from 5 to 1 before printing "Liftoff!".</p></div>`,
+          quiz:[
+            {q:"What does range(1, 4) produce in a for loop?", options:["1, 2, 3","1, 2, 3, 4","0, 1, 2, 3","Only 4"], a:0},
+            {q:"When is a while loop especially useful?", options:["When you know the exact repeat count in advance","When you don't know exactly how many repeats you'll need","Never, always use for","Only for printing text"], a:1},
+            {q:"What's an 'infinite loop'?", options:["A loop that runs exactly once","A loop whose condition never becomes false, so it never stops","A type of variable","A syntax error"], a:1},
+          ]},
+        { id:"p5", title:"Functions: reusable blocks of code", time:"20 min", hours:0.33, body:`
+          <div class="codeblock">def greet(name):
+    return f"Hello, {name}! Welcome."
+
+message = greet("Arjun")
+print(message)
+
+def add(a, b):
+    return a + b
+
+print(add(4, 7))   # 11</div>
+          <p><code>def</code> defines a function. The values inside the parentheses (<code>name</code>, or <code>a, b</code>) are <strong>parameters</strong> — inputs the function needs. <code>return</code> sends a value back out to wherever the function was called.</p>
+          <p>Functions are the building block of every real program — they let you break a big problem into small, testable pieces, and reuse them anywhere without retyping the same logic.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Write a function called <code>discount_price</code> that takes a price and a discount percentage, and returns the final price after the discount. Test it by calling it with a few different values and printing the results.</p></div>`,
+          quiz:[
+            {q:"What keyword defines a function in Python?", options:["func","def","function","new"], a:1},
+            {q:"What does 'return' do inside a function?", options:["Prints text permanently","Sends a value back to where the function was called","Deletes the function","Stops the whole program"], a:1},
+            {q:"Why are functions useful?", options:["They make code slower","They let you reuse code without rewriting it","They only work with numbers","They replace variables entirely"], a:1},
+          ]},
+        { id:"p6", title:"Lists & dictionaries", time:"20 min", hours:0.33, body:`
+          <div class="codeblock">expenses = [200, 450, 100, 900]
+expenses.append(50)
+print(expenses[0])        # 200 (first item)
+print(sum(expenses))      # total</div>
+          <div class="codeblock">student = {"name": "Meera", "age": 21, "city": "Pune"}
+print(student["name"])    # Meera
+student["age"] = 22       # update a value</div>
+          <p>Lists are ordered and accessed by position (index, starting at 0). Dictionaries are accessed by a named key instead of a position — much clearer for real-world data where each value has a label.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Create a list of 5 of your own expenses (just numbers). Print the total and the average (total divided by the count). Then create a dictionary representing yourself with at least 3 keys, and print one value by its key.</p></div>`,
+          quiz:[
+            {q:"What index does the first item in a Python list have?", options:["1","0","-1","It has no index"], a:1},
+            {q:"How do you access a dictionary value by its key?", options:["dict[0]","dict['key']","dict.first()","dict->key"], a:1},
+            {q:"What does .append() do to a list?", options:["Removes the last item","Adds an item to the end","Sorts the list","Deletes the whole list"], a:1},
+          ]},
+        { id:"p7", title:"Files & handling errors", time:"20 min", hours:0.33, body:`
+          <div class="codeblock">with open("notes.txt", "w") as f:
+    f.write("My first saved file!")
+
+with open("notes.txt", "r") as f:
+    print(f.read())</div>
+          <p><code>"w"</code> mode writes (overwrites) a file, <code>"r"</code> reads it. The <code>with</code> keyword automatically closes the file safely when done.</p>
+          <p>To handle errors without crashing the whole program, use <strong>try/except</strong>:</p>
+          <div class="codeblock">try:
+    number = int(input("Enter a number: "))
+    print(100 / number)
+except ValueError:
+    print("That wasn't a valid number.")
+except ZeroDivisionError:
+    print("Can't divide by zero.")</div>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Write a small program that asks the user for their name and saves it to a file called <code>myname.txt</code>. Then write a separate bit of code that reads the file back and greets that name. Wrap the reading part in try/except in case the file doesn't exist yet.</p></div>`,
+          quiz:[
+            {q:"What does 'w' mode do when opening a file?", options:["Reads a file","Writes (overwrites) a file","Deletes a file","Renames a file"], a:1},
+            {q:"What does try/except let you do?", options:["Speed up your code","Handle errors without crashing the program","Write files faster","Avoid using variables"], a:1},
+            {q:"Why use 'with open(...) as f'?", options:["It's required syntax with no benefit","It automatically closes the file safely when done","It makes the file smaller","It encrypts the file"], a:1},
+          ]},
+        { id:"p8", title:"Final project: build a Budget Tracker app", time:"45 min", hours:0.75, body:`
+          <p>Time to combine everything — variables, loops, functions, lists, and files — into one real, runnable command-line app: a personal budget tracker.</p>
+          <div class="codeblock">expenses = []
+
+def add_expense():
+    desc = input("What did you spend on? ")
+    amount = float(input("How much? "))
+    expenses.append({"desc": desc, "amount": amount})
+    print(f"Added: {desc} - {amount}")
+
+def show_total():
+    total = sum(e["amount"] for e in expenses)
+    print(f"Total spent: {total}")
+
+def save_to_file():
+    with open("budget.txt", "w") as f:
+        for e in expenses:
+            f.write(f"{e['desc']}: {e['amount']}\\n")
+    print("Saved to budget.txt")
+
+while True:
+    choice = input("\\n1) Add expense  2) Show total  3) Save & exit\\n> ")
+    if choice == "1":
+        add_expense()
+    elif choice == "2":
+        show_total()
+    elif choice == "3":
+        save_to_file()
+        break
+    else:
+        print("Please choose 1, 2 or 3.")</div>
+          <p>Save this as <code>budget.py</code> and run <code>python budget.py</code>. Add a few expenses, check your total, and save — you now own a working app you built yourself, and every single line is something you learned in this module.</p>
+          <div class="callout">💡 Try extending it yourself: add a "delete expense" option, or a monthly spending limit warning. That's exactly how real developers grow a project.</div>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 15 min</div>
+          <p>Type this entire program yourself (don't just copy-paste — typing it builds muscle memory), run it, and actually use it to log a real day of your spending. Then pick ONE extension and implement it: a delete option, a running spending limit warning, or a "show expenses by category" option using a second field.</p></div>`,
+          quiz:[
+            {q:"What does the while True loop do in this app?", options:["Runs once and stops","Keeps showing the menu until the user chooses to exit","Deletes all expenses","Only works for saving files"], a:1},
+            {q:"What does sum(e[\"amount\"] for e in expenses) calculate?", options:["The number of expenses","The total of all expense amounts","The average expense","The first expense only"], a:1},
+            {q:"What's a good next step to extend this project?", options:["Add a delete-expense option or spending limit warning","Nothing, it's already finished forever","Rewrite it in a different language immediately","Delete all the functions"], a:0},
+          ]},
+      ]},
+      { title:"Web Basics: HTML, CSS & JS", lessons:[
+        { id:"h1", title:"HTML basics — structure a webpage", time:"20 min", hours:0.33, body:`
+          <p>Every webpage is built from HTML "tags" that wrap around content:</p>
+          <div class="codeblock">&lt;html&gt;
+  &lt;body&gt;
+    &lt;h1&gt;My First Page&lt;/h1&gt;
+    &lt;p&gt;This is a paragraph.&lt;/p&gt;
+    &lt;button&gt;Click me&lt;/button&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</div>
+          <p><strong>&lt;h1&gt;</strong> is a big heading. <strong>&lt;p&gt;</strong> is a paragraph. <strong>&lt;button&gt;</strong> makes a clickable button. Save as a file ending in <code>.html</code> and open it in any browser — no installation needed.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Create a file called <code>myprofile.html</code>. Add a heading with your name, a paragraph describing yourself in one sentence, and a button. Open it by double-clicking the file — it should open right in your browser.</p></div>`,
+          quiz:[
+            {q:"What does the <h1> tag create?", options:["A paragraph","A large heading","A button","An image"], a:1},
+            {q:"What file ending does a webpage need?", options:[".py",".html",".exe",".doc"], a:1},
+          ]},
+        { id:"css1", title:"CSS basics — make it look good", time:"20 min", hours:0.33, body:`
+          <p>HTML gives structure; <strong>CSS</strong> gives style — color, spacing, fonts, layout. You can write it right inside your HTML file:</p>
+          <div class="codeblock">&lt;style&gt;
+  h1 { color: #2EC4B6; font-family: sans-serif; }
+  button {
+    background: #FFB627;
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: none;
+  }
+&lt;/style&gt;</div>
+          <p>CSS "selectors" (like <code>h1</code> or <code>button</code>) target which HTML elements get styled. Properties like <code>color</code>, <code>padding</code>, and <code>border-radius</code> control exactly how they look.</p>
+          <div class="callout">💡 Every well-designed website you've ever used is HTML + CSS underneath (often plus JavaScript for interactivity).</div>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Open the <code>myprofile.html</code> file from the last lesson and add a <code>&lt;style&gt;</code> block. Change the heading color, give the button a background color and rounded corners, and add some spacing (padding) around the page body.</p></div>`,
+          quiz:[
+            {q:"What is CSS mainly responsible for?", options:["Page structure","Visual styling (colors, spacing, layout)","Database storage","Running loops"], a:1},
+            {q:"In 'h1 { color: #2EC4B6; }', what is 'h1'?", options:["A property","A selector, targeting which elements to style","A color value","A function"], a:1},
+          ]},
+        { id:"js1", title:"JavaScript basics — make it interactive", time:"20 min", hours:0.33, body:`
+          <p><strong>JavaScript</strong> makes webpages respond to clicks, typing, and other actions. Add it inside a <code>&lt;script&gt;</code> tag:</p>
+          <div class="codeblock">&lt;button onclick="sayHi()"&gt;Click me&lt;/button&gt;
+
+&lt;script&gt;
+function sayHi() {
+  alert("Hello! You clicked the button.");
+}
+&lt;/script&gt;</div>
+          <p>Here, <code>onclick</code> tells the browser to run the <code>sayHi()</code> function whenever the button is clicked. This is the exact same pattern — HTML for structure, CSS for style, JS for behavior — used to build the app you're using right now.</p>
+          <div class="callout">💡 Next step after this: try building a small project combining all three, like a to-do list webpage.</div>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Add a script block to your profile page. Make the button change the page's text (instead of showing an alert) when clicked — hint: use <code>document.getElementById</code> to grab an element and change its <code>innerText</code>.</p></div>`,
+          quiz:[
+            {q:"What does JavaScript primarily add to a webpage?", options:["Structure only","Colors only","Interactivity and behavior","Database storage"], a:2},
+            {q:"What does onclick=\"sayHi()\" do?", options:["Runs the sayHi function automatically on page load","Runs the sayHi function when that element is clicked","Deletes the button","Styles the button"], a:1},
+          ]},
+      ]},
+      { title:"Java Fundamentals", lessons:[
+        { id:"j1", title:"Installing the JDK & your first Java program", time:"20 min", hours:0.33, body:`
+          <p>Download a free JDK (Java Development Kit) — Eclipse Temurin (Adoptium) is a solid, trusted, free option. Install it, then check with <code>java -version</code> and <code>javac -version</code> in a terminal.</p>
+          <div class="codeblock">public class HelloWorld {
+    public static void main(String[] args) {
+        System.out.println("Hello, world!");
+    }
+}</div>
+          <p>Unlike Python, Java needs a <strong>compile</strong> step first: <code>javac HelloWorld.java</code> turns it into bytecode, then <code>java HelloWorld</code> runs it.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Install the JDK, save the exact code above as <code>HelloWorld.java</code>, compile it, and run it. Then change the printed message and repeat the compile-run cycle.</p></div>`,
+          quiz:[
+            {q:"What is the JDK?", options:["A web browser","The Java Development Kit needed to compile and run Java","A database","A design tool"], a:1},
+            {q:"What does javac do?", options:["Runs a compiled program","Compiles Java source code into bytecode","Deletes a file","Installs Python"], a:1},
+          ]},
+        { id:"j2", title:"Variables, types & classes", time:"20 min", hours:0.33, body:`
+          <p>Java is <strong>statically typed</strong> — you declare each variable's type explicitly, unlike Python:</p>
+          <div class="codeblock">int age = 22;
+double height = 5.4;
+String name = "Priya";
+boolean isStudent = true;</div>
+          <p>Everything in Java lives inside a <strong>class</strong> — the container for your code. You'll see this in every Java file you write.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Inside your HelloWorld class's main method, declare four variables about yourself (name, age, height, isStudent) using the correct Java types, then print them combined into one sentence using <code>System.out.println</code>.</p></div>`,
+          quiz:[
+            {q:"What does 'statically typed' mean?", options:["Types change automatically","You must declare each variable's type explicitly","Variables can't be changed ever","Java has no types"], a:1},
+            {q:"What must every piece of Java code live inside?", options:["A function only","A class","A loop","A file"], a:1},
+          ]},
+        { id:"j3", title:"Object-oriented programming basics", time:"25 min", hours:0.42, body:`
+          <p>OOP's core idea: bundle data and the actions on that data together into <strong>objects</strong>, created from <strong>classes</strong> (blueprints).</p>
+          <div class="codeblock">class Student {
+    String name;
+    int age;
+    void greet() {
+        System.out.println("Hi, I'm " + name);
+    }
+}
+
+Student s = new Student();
+s.name = "Arjun";
+s.greet();</div>
+          <p>A class = the blueprint. An object = one instance created from that blueprint. A method = a function that belongs to a class.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 10 min</div>
+          <p>Create your own class called <code>BudgetItem</code> with two fields (description, amount) and a method <code>show()</code> that prints them. Create two BudgetItem objects with different values and call <code>show()</code> on each.</p></div>`,
+          quiz:[
+            {q:"What is a class in OOP terms?", options:["A single value","A blueprint for creating objects","A type of loop","An error message"], a:1},
+            {q:"What is an 'object'?", options:["The blueprint itself","A specific instance created from a class","A file extension","A comment"], a:1},
+          ]},
+        { id:"j4", title:"Loops & control flow in Java", time:"20 min", hours:0.33, body:`
+          <div class="codeblock">for (int i = 1; i &lt;= 3; i++) {
+    System.out.println("Lesson " + i);
+}
+
+if (balance &gt; 1000) {
+    System.out.println("You can invest.");
+} else {
+    System.out.println("Keep saving.");
+}</div>
+          <p>Java's syntax uses curly braces <code>{ }</code> and semicolons <code>;</code> — unlike Python, which relies purely on indentation.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Write a for loop that prints numbers 1 through 10, but skips (using an if check) any number divisible by 3.</p></div>`,
+          quiz:[
+            {q:"What does Java use to mark the start/end of a code block?", options:["Indentation only","Curly braces { }","Nothing, it's automatic","Tabs only"], a:1},
+            {q:"What must end most Java statement lines?", options:["A period","A semicolon ;","A comma","Nothing"], a:1},
+          ]},
+        { id:"j5", title:"Building a simple Android app", time:"25 min", hours:0.42, body:`
+          <p>Android apps are commonly built with Java (or Kotlin) using the free tool <strong>Android Studio</strong>. Basic steps: install Android Studio, create a new project using the "Empty Activity" template, edit the button's behavior inside <code>MainActivity.java</code>, then run it on an emulator or your own phone via USB debugging.</p>
+          <div class="callout">💡 A great first hands-on exercise: just change the button's text and what happens when it's tapped.</div>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 15 min</div>
+          <p>Install Android Studio (it's a larger download, so start it and let it install in the background while you continue). Create an "Empty Activity" project, find the button in the layout file, and change what text appears when it's clicked.</p></div>`,
+          quiz:[
+            {q:"What free tool is commonly used to build Android apps?", options:["Android Studio","Microsoft Word","Photoshop","Excel"], a:0},
+            {q:"Where do you commonly edit an Android app's button behavior?", options:["A CSS file","MainActivity.java","A budget.py file","A README"], a:1},
+          ]},
+      ]},
+      { title:"C++ Fundamentals", lessons:[
+        { id:"cpp1", title:"Setting up a C++ compiler & first program", time:"20 min", hours:0.33, body:`
+          <p>Windows: install MinGW, or start instantly with an online compiler like replit.com. Mac/Linux: <code>g++</code> is often preinstalled — check with <code>g++ --version</code>.</p>
+          <div class="codeblock">#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    cout &lt;&lt; "Hello, world!" &lt;&lt; endl;
+    return 0;
+}</div>
+          <p>Compile: <code>g++ hello.cpp -o hello</code>, then run <code>./hello</code> (or <code>hello.exe</code> on Windows).</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Get a compiler working (local or online), type the exact code above into <code>hello.cpp</code>, compile, and run it. Then edit the message and repeat.</p></div>`,
+          quiz:[
+            {q:"What do you need installed to compile C++ locally?", options:["Nothing, it runs directly","A C++ compiler like g++ or MinGW","Only a web browser","Python"], a:1},
+            {q:"What does 'cout' do in C++?", options:["Reads user input","Outputs text to the screen","Deletes a variable","Compiles the program"], a:1},
+          ]},
+        { id:"cpp2", title:"Variables, pointers & memory basics", time:"20 min", hours:0.33, body:`
+          <div class="codeblock">int age = 22;
+int* ptr = &age;
+cout &lt;&lt; *ptr; // 22</div>
+          <p>A <strong>pointer</strong> is a variable that stores a memory address rather than a value directly. This is unique to languages like C++ and gives direct control over memory — part of why C++ is fast, and also why bugs like memory leaks are possible.</p>
+          <div class="callout">💡 Beginners don't need to master pointers immediately — just recognize the concept for now.</div>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Run the exact pointer example above. Then create a second variable, point a new pointer at it, and print both the pointer's address (just <code>ptr</code> without the *) and the value it points to (<code>*ptr</code>) to see the difference.</p></div>`,
+          quiz:[
+            {q:"What does a pointer store?", options:["A text string","A memory address","A boolean value","A file name"], a:1},
+            {q:"Why does C++ give direct memory control matter?", options:["It makes code slower","It's part of why C++ can be very fast, at the cost of more responsibility for the programmer","It has no real effect","It only affects graphics"], a:1},
+          ]},
+        { id:"cpp3", title:"Control flow & functions in C++", time:"20 min", hours:0.33, body:`
+          <div class="codeblock">int add(int a, int b) {
+    return a + b;
+}
+
+int main() {
+    if (add(2,3) &gt; 4) {
+        cout &lt;&lt; "Bigger than 4";
+    }
+    return 0;
+}</div>
+          <p>Functions in C++ require an explicit return type (here, <code>int</code>). If/else and loops follow the same curly-brace, semicolon style as Java.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Write your own function <code>isEven(int n)</code> that returns true if a number is even. Call it inside an if statement and print a message depending on the result.</p></div>`,
+          quiz:[
+            {q:"What must a C++ function declare, unlike in Python?", options:["Nothing extra","An explicit return type","A class name","A file path"], a:1},
+          ]},
+        { id:"cpp4", title:"Build a small text-based game", time:"25 min", hours:0.42, body:`
+          <div class="codeblock">#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int secret = 7, guess;
+    cout &lt;&lt; "Guess a number 1-10: ";
+    cin &gt;&gt; guess;
+    if (guess == secret) {
+        cout &lt;&lt; "Correct!";
+    } else {
+        cout &lt;&lt; "Try again, it wasn't " &lt;&lt; guess;
+    }
+    return 0;
+}</div>
+          <p><code>cin</code> reads user input. Try extending this into a loop that gives multiple guesses, and use <code>rand()</code> to make the secret number random each time.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 15 min</div>
+          <p>Type and run the game above. Then extend it yourself: wrap the guess logic in a loop that allows up to 3 attempts, and print "Game over" if all attempts are used without a correct guess.</p></div>`,
+          quiz:[
+            {q:"What does 'cin' do in this program?", options:["Prints output","Reads input from the user","Compiles the code","Ends the program"], a:1},
+            {q:"What's a good way to extend this game?", options:["Delete the if statement","Add a loop for multiple guesses and randomize the secret number","Remove all comments","Nothing else is possible"], a:1},
+          ]},
+        { id:"cpp5", title:"When and why to choose C++", time:"15 min", hours:0.25, body:`
+          <p>Choose C++ when performance and direct hardware control really matter: games (Unreal Engine is built on C++), operating systems, embedded devices, high-frequency trading systems.</p>
+          <p>For most beginner web, app, or AI projects, Python or Java is usually the more practical first choice — C++ is a specialized tool you reach for once you know you need that level of speed and control.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>List 3 project ideas you're personally interested in. For each, decide honestly whether it actually needs C++-level performance, or whether Python/Java would be the more practical choice — and why.</p></div>`,
+          quiz:[
+            {q:"C++ is especially chosen for:", options:["Basic websites","Performance-critical systems like games and operating systems","Simple to-do apps only","Nothing specific"], a:1},
+          ]},
+      ]},
+      { title:"Git, GitHub & Real Projects", lessons:[
+        { id:"g1", title:"What version control is & why it matters", time:"15 min", hours:0.25, body:`
+          <p><strong>Version control</strong> tracks every change to your code over time, so you can undo mistakes, see history, and collaborate without overwriting each other's work. <strong>Git</strong> is the most widely used version control tool — free, and works locally on your computer.</p>
+          <p>Imagine writing an essay and being able to instantly rewind to any previous draft, or see exactly what changed between two versions — that's what Git gives you for code, automatically.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Think of a time you accidentally broke something by editing a file with no backup. Write one sentence on how version control would have saved you in that exact situation — this is the "why" that makes the next lessons click.</p></div>`,
+          quiz:[
+            {q:"What is version control mainly used for?", options:["Making code run faster","Tracking changes to code over time, and enabling collaboration","Designing webpages","Compiling C++"], a:1},
+          ]},
+        { id:"g2", title:"Installing Git & your first commit", time:"20 min", hours:0.33, body:`
+          <p>Install Git from git-scm.com. Basic flow:</p>
+          <div class="codeblock">git init
+git add .
+git commit -m "My first commit"</div>
+          <p><code>init</code> starts tracking a folder, <code>add</code> stages changes, <code>commit</code> saves a snapshot with a message describing what changed.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 10 min</div>
+          <p>Install Git. Pick any folder with a file in it (like your Budget Tracker project), run <code>git init</code>, then <code>git add .</code>, then commit with a real message describing what's in it. Run <code>git log</code> to see your commit history.</p></div>`,
+          quiz:[
+            {q:"What does 'git add .' do?", options:["Deletes all files","Stages changes to be committed","Uploads to GitHub","Installs Git"], a:1},
+            {q:"What does a commit message describe?", options:["The computer's specs","What changed in that snapshot","The user's password","Nothing important"], a:1},
+          ]},
+        { id:"g3", title:"Pushing code to GitHub", time:"25 min", hours:0.42, body:`
+          <p>GitHub is a free website that hosts your Git repositories online, so you can back them up and share them.</p>
+          <div class="codeblock">git remote add origin https://github.com/username/repo.git
+git push -u origin main</div>
+          <p>"Remote" = the online copy. "Push" = sending your local commits there.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 15 min</div>
+          <p>Create a free GitHub account if you don't have one. Create a new empty repository, then push the project you committed in the last lesson to it using the commands above. Refresh the GitHub page and confirm your files appear there.</p></div>`,
+          quiz:[
+            {q:"What does 'git push' do?", options:["Deletes your local commits","Sends your local commits to the remote (GitHub) repository","Downloads code","Compiles your code"], a:1},
+          ]},
+        { id:"g4", title:"Working with branches", time:"20 min", hours:0.33, body:`
+          <p>A <strong>branch</strong> is a separate line of development, so you can try changes without affecting your main working code.</p>
+          <div class="codeblock">git branch feature-login
+git checkout feature-login</div>
+          <p>Workflow: branch → make changes → commit → merge back into main once it works. This is how real teams avoid breaking each other's code.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>In your repo, create a new branch, make a small change to a file, and commit it on that branch. Switch back to <code>main</code> with <code>git checkout main</code> and notice the change isn't there — that's branch isolation in action.</p></div>`,
+          quiz:[
+            {q:"Why use a branch instead of editing main directly?", options:["It's required by GitHub","It lets you try changes safely without affecting the main working code","It deletes your code","It's slower for no reason"], a:1},
+          ]},
+        { id:"g5", title:"Deploying a free website with GitHub Pages", time:"25 min", hours:0.42, body:`
+          <p>GitHub Pages turns a GitHub repository into a live website for free. Push your HTML/CSS/JS files to a repo, go to repo <strong>Settings → Pages</strong>, choose the branch to publish, and GitHub gives you a live URL like <code>username.github.io/repo</code>.</p>
+          <div class="callout">💡 Perfect way to actually host the projects you built in the Web Basics module.</div>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 15 min</div>
+          <p>Push your <code>myprofile.html</code> page from the Web Basics module to a new GitHub repo, enable GitHub Pages in Settings, and visit your live URL once it's ready (can take a minute or two).</p></div>`,
+          quiz:[
+            {q:"What does GitHub Pages let you do for free?", options:["Compile C++ code","Host a live website from your repository","Buy stocks","Send emails"], a:1},
+          ]},
+        { id:"g6", title:"Building a portfolio of real projects", time:"20 min", hours:0.33, body:`
+          <p>Choose 3-5 small, <strong>finished</strong> projects (not half-done ones) to showcase — e.g. the Budget Tracker app, a personal webpage, a simple game. For each, write a short README explaining what it does and what you learned.</p>
+          <div class="callout">💡 Employers/clients care more about a few polished, explained projects than many unfinished ones.</div>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 10 min</div>
+          <p>Write a short README.md for your Budget Tracker project: what it does, how to run it, and one thing you learned building it. Add it to the repo and push it.</p></div>`,
+          quiz:[
+            {q:"What matters more for a beginner portfolio?", options:["Many unfinished projects","A few polished, finished, and explained projects","Only projects that use AI","The total number of files"], a:1},
+          ]},
+      ]},
+      { title:"Databases & SQL", lessons:[
+        { id:"d1", title:"What a database is, in plain terms", time:"15 min", hours:0.25, body:`
+          <p>A database is an organized place to store data so it can be reliably saved, searched, and updated — built to handle lots of data efficiently and safely, even with many people using it at once. Common types: <strong>relational</strong> (tables that can be linked — MySQL, PostgreSQL, SQLite) and <strong>NoSQL</strong> (flexible documents — MongoDB).</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Think about the Budget Tracker's <code>budget.txt</code> text file. Write down two problems that would appear once you had thousands of expenses in it — this is exactly the gap a real database fills.</p></div>`,
+          quiz:[
+            {q:"What's the main advantage of a database over a plain text file?", options:["It's always smaller","It's built to reliably store, search, and update data, even with many users", "It requires no computer","It can only store numbers"], a:1},
+          ]},
+        { id:"d2", title:"Reading & writing data with SQL", time:"20 min", hours:0.33, body:`
+          <div class="codeblock">SELECT name, amount FROM expenses WHERE amount &gt; 500;
+
+INSERT INTO expenses (desc, amount) VALUES ('Groceries', 450);</div>
+          <p><code>SELECT</code> retrieves data, <code>WHERE</code> filters it, <code>INSERT</code> adds new rows. SQL (Structured Query Language) is how you "talk" to a relational database.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 10 min</div>
+          <p>Use a free online SQL playground (search "SQLite online playground") and try running both statements above, then a SELECT with a different WHERE condition of your own.</p></div>`,
+          quiz:[
+            {q:"What does SELECT do in SQL?", options:["Deletes data","Retrieves data","Installs a database","Creates a webpage"], a:1},
+            {q:"What does WHERE do?", options:["Nothing","Filters which rows are returned","Sorts alphabetically only","Renames a column"], a:1},
+          ]},
+        { id:"d3", title:"Connecting a Python app to a database", time:"25 min", hours:0.42, body:`
+          <p>Python's built-in <code>sqlite3</code> module lets you use a real database with zero extra installation:</p>
+          <div class="codeblock">import sqlite3
+conn = sqlite3.connect("budget.db")
+c = conn.cursor()
+c.execute("CREATE TABLE IF NOT EXISTS expenses (desc TEXT, amount REAL)")
+c.execute("INSERT INTO expenses VALUES (?, ?)", ("Groceries", 450))
+conn.commit()</div>
+          <p>This upgrades the earlier Budget Tracker project from a plain text file to a real, searchable database.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 15 min</div>
+          <p>Run the code above in a new Python file. Then add a line that runs <code>SELECT * FROM expenses</code> and prints every row with <code>c.fetchall()</code>, so you can see your saved data come back out.</p></div>`,
+          quiz:[
+            {q:"What Python module lets you use SQLite with no extra install?", options:["sqlite3 (built-in)","pandas","flask","requests"], a:0},
+          ]},
+        { id:"d4", title:"Basic data safety practices", time:"15 min", hours:0.25, body:`
+          <p>Never store passwords in plain text. Never hardcode secret keys directly in code you share publicly — use environment variables or config files instead, and add them to <code>.gitignore</code>. Always back up important data, and be cautious about granting broad database access.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>If you've pushed any project to GitHub, check it right now for anything that looks like a password or key typed directly into the code. If you find one, that's a real, useful fix to make today.</p></div>`,
+          quiz:[
+            {q:"Where should secret keys NOT be placed?", options:["In an environment variable","Directly hardcoded in publicly shared code","In a private config file","In a password manager"], a:1},
+          ]},
+      ]},
+    ]
+  },
+
+  money: {
+    title:"Stocks & Investing", icon:"₹", color:"#F2637B", bg:"rgba(242,99,123,0.14)",
+    desc:"Saving, the stock market, IPOs, mutual funds, reading statements, taxes, portfolios and common mistakes.",
+    modules:[
+      { title:"Money Basics", lessons:[
+        { id:"m1", title:"Saving vs. investing", time:"20 min", hours:0.33, body:`
+          <p><strong>Saving</strong> means keeping money safe and easy to access — like in a bank savings account. It barely grows, but it's very low risk. Good for money you'll need soon (emergencies, rent).</p>
+          <p><strong>Investing</strong> means putting money into something with the goal of it growing over years — like stocks or mutual funds. It can lose value in the short term, but historically grows faster than savings over the long term.</p>
+          <p>The general rule: keep 3–6 months of expenses saved safely first. <strong>Only invest money you won't need soon.</strong> This isn't about being overly cautious — it's about never being forced to sell an investment at a bad time just because you suddenly needed cash.</p>
+          <div class="callout">💡 Never invest money that you need for rent, food, or emergencies next month. Investing is a long game.</div>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Add up your essential monthly expenses (rent, food, transport, bills). Multiply by 3 and by 6 — that range is your personal emergency fund target before you start investing seriously.</p></div>`,
+          quiz:[
+            {q:"Which is best for money you might need next week?", options:["Investing in stocks","A savings account","A mutual fund","An IPO"], a:1},
+            {q:"What should you generally do before investing?", options:["Invest everything immediately","Build 3–6 months of savings for emergencies first","Borrow money to invest","Nothing, just start investing"], a:1},
+          ]},
+        { id:"m2", title:"What is the stock market?", time:"15 min", hours:0.25, body:`
+          <p>A <strong>stock</strong> (or "share") is a tiny piece of ownership in a company. If a company does well and grows in value, your share is worth more. If it does poorly, it's worth less.</p>
+          <p>The <strong>stock market</strong> is simply the place — now mostly online — where people buy and sell these shares. Prices move up and down constantly based on how much buyers are willing to pay.</p>
+          <p><strong>Trading</strong> usually means buying and selling quickly, trying to profit from short-term price moves — this is risky and needs experience. <strong>Investing</strong> usually means holding shares for years, betting on a company's long-term growth.</p>
+          <div class="callout">💡 Beginners are usually better off starting with long-term investing than short-term trading — trading requires skill and risk management that takes time to learn.</div>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Look up the current share price of one company you use or know well (search "[company name] stock price"). Note the price, then check what it was a year ago — that gap is exactly the kind of movement this lesson describes.</p></div>`,
+          quiz:[
+            {q:"What is a stock?", options:["A loan you give a company","A tiny piece of ownership in a company","A type of bank account","A government bond"], a:1},
+            {q:"What's the key difference between trading and investing?", options:["There is no difference","Trading is short-term buying/selling; investing is long-term holding","Trading is always safer","Investing means you can't lose money"], a:1},
+            {q:"Why might a beginner start with investing rather than trading?", options:["Trading is illegal for beginners","Investing guarantees profit","Trading needs more skill/experience to manage risk well","Investing requires a special license"], a:2},
+          ]},
+        { id:"m3", title:"IPOs and mutual funds, explained", time:"20 min", hours:0.33, body:`
+          <p>An <strong>IPO (Initial Public Offering)</strong> is the first time a private company sells shares to the public, so anyone can buy a piece of it. Before an IPO, only founders, employees, and private investors owned shares.</p>
+          <p>IPOs can be exciting but risky — a new stock's price can swing wildly. Beginners should research the company's actual business and financials, not just hype, before buying into an IPO.</p>
+          <p>A <strong>mutual fund</strong> pools money from many people to buy a mix of stocks or bonds, managed by a professional. This gives you instant diversification (many companies at once) even with a small amount of money. A <strong>SIP (Systematic Investment Plan)</strong> lets you invest a small fixed amount every month automatically — a common, beginner-friendly way to start investing without needing a lot of money upfront.</p>
+          <div class="callout">💡 This app gives you the vocabulary and concepts. Before investing real money, also read your country's official investor-education resources and consider talking to a licensed advisor.</div>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 10 min</div>
+          <p>Search for one well-known mutual fund or index fund available in your country. Find its expense ratio and its returns over the last 5 years — just the act of finding these two numbers is the core research skill for this lesson.</p></div>`,
+          quiz:[
+            {q:"What is an IPO?", options:["A type of savings account","The first time a company sells shares to the public","A government tax","A loan between friends"], a:1},
+            {q:"What does a mutual fund give you that buying one stock doesn't?", options:["Guaranteed profit","Instant diversification across many companies","Zero risk","Free stocks"], a:1},
+            {q:"A SIP is:", options:["A one-time huge investment","A small fixed amount invested automatically every month","A type of savings account only","A tax refund"], a:1},
+          ]},
+      ]},
+      { title:"Reading the Market", lessons:[
+        { id:"m4", title:"Charts & order types", time:"20 min", hours:0.33, body:`
+          <p>A <strong>candlestick chart</strong> shows a stock's price movement over a time period: the "body" shows opening vs closing price, and thin lines ("wicks") show the highest and lowest price reached. Green/white usually means price went up in that period, red/black means it went down.</p>
+          <p>When buying, you'll choose an <strong>order type</strong>: a <strong>market order</strong> buys immediately at the current price. A <strong>limit order</strong> only executes at a price you set or better — giving you control, but it might not execute at all if the price never reaches your limit.</p>
+          <div class="callout">💡 As a beginner, limit orders are usually safer — they prevent you from accidentally buying at a spike in price.</div>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Search "[any company] stock chart" and switch the view to candlestick if it isn't already. Find one green (up) candle and one red (down) candle, and read off their approximate open/close values.</p></div>`,
+          quiz:[
+            {q:"What does the body of a candlestick show?", options:["Only the highest price of the day","Opening vs closing price for that period","The company's total profit","The stock's name"], a:1},
+            {q:"What's the difference between a market and limit order?", options:["No difference","Market order executes immediately at current price; limit order only at your chosen price or better","Limit orders are always faster","Market orders are illegal for beginners"], a:1},
+          ]},
+        { id:"m5", title:"Risk management & investor psychology", time:"15 min", hours:0.25, body:`
+          <p>The biggest risk to most beginner investors isn't the market — it's their own emotions. <strong>Fear</strong> causes panic-selling when prices drop (locking in a loss). <strong>Greed/FOMO</strong> causes buying into a stock only because "everyone is talking about it," often near its peak price.</p>
+          <p>Practical risk management: never put all your money into one stock (<strong>diversify</strong>), only invest money you can afford to see drop temporarily, and decide your strategy <em>before</em> emotions are involved — not while watching a chart move in real time.</p>
+          <div class="callout">💡 A useful question before any investing decision: "Would I still make this choice if I couldn't check the price for a year?"</div>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Think of one purchase or decision (not necessarily investing) you made recently out of fear or excitement rather than a plan. Write one sentence on what a "decide before emotions are involved" version of that decision would have looked like.</p></div>`,
+          quiz:[
+            {q:"What is 'FOMO' investing?", options:["A safe, calculated strategy","Buying something just because everyone else is talking about it","A type of government bond","A diversification technique"], a:1},
+            {q:"What does 'diversify' mean?", options:["Put all money into one stock","Spread money across different investments to reduce risk","Only invest in IPOs","Avoid investing entirely"], a:1},
+          ]},
+      ]},
+      { title:"Reading Financial Statements", lessons:[
+        { id:"f1", title:"What a company's income statement tells you", time:"20 min", hours:0.33, body:`
+          <p>An income statement shows revenue (money coming in), expenses, and resulting profit/loss over a period (quarter/year). Reading top to bottom: revenue → minus costs → minus operating expenses → net profit. This tells you if a company is actually making money, not just growing in size.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 10 min</div>
+          <p>Search "[any large company] income statement" and open the most recent one (many are freely published as investor relations PDFs). Find the revenue line and the net profit line — notice how much smaller profit usually is compared to revenue.</p></div>`,
+          quiz:[
+            {q:"What does an income statement mainly reveal?", options:["The CEO's salary only","Whether a company is actually profitable over a period","The company's logo history","Its stock ticker symbol"], a:1},
+          ]},
+        { id:"f2", title:"Profit vs revenue", time:"15 min", hours:0.25, body:`
+          <p>Revenue = total money a company brings in from sales, before subtracting any costs. Profit = what's left after subtracting all expenses, so a company can have huge revenue but tiny (or negative) profit if costs are high. Beginners often confuse "biggest revenue" with "most successful" — margins matter more.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Pick two companies you know of in the same industry. Search each one's "profit margin" — compare the percentages, not just the total revenue, to see which is actually more efficient.</p></div>`,
+          quiz:[
+            {q:"A company can have huge revenue but still have:", options:["Guaranteed profit","Little or negative profit if costs are high","No stock price","Zero employees"], a:1},
+          ]},
+        { id:"f3", title:"Debt & balance sheets, simplified", time:"15 min", hours:0.25, body:`
+          <p>A balance sheet shows what a company owns (assets), what it owes (liabilities/debt), and the difference (equity) at one point in time. High debt isn't automatically bad — it depends on whether the company can comfortably pay it back from its earnings.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Search "[any company] total debt" and "[same company] annual profit." Just from these two numbers, form a rough opinion on whether their debt looks manageable relative to their earnings.</p></div>`,
+          quiz:[
+            {q:"Is high company debt automatically a bad sign?", options:["Yes, always avoid any debt","Not necessarily — depends on ability to repay from earnings","Debt doesn't matter at all","Only government debt matters"], a:1},
+          ]},
+        { id:"f4", title:"Red flags to watch before investing", time:"20 min", hours:0.33, body:`
+          <p>Warning signs: consistently falling profit margins, rapidly rising debt without matching revenue growth, frequent changes in auditors/leadership, and hype-heavy marketing with little underlying financial detail. None of these alone means "avoid" but they're reasons to dig deeper before investing.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 10 min</div>
+          <p>Pick any stock you've heard hyped up recently (from news or social media). Search its recent profit trend and debt trend. Based on just these two things, would you personally want to dig deeper before investing, or does it look fine?</p></div>`,
+          quiz:[
+            {q:"Which is a red flag worth investigating further?", options:["Steady profit growth","Rapidly rising debt without matching revenue growth","A stable leadership team","Clear, detailed financial disclosures"], a:1},
+          ]},
+      ]},
+      { title:"Taxes & Long-Term Planning", lessons:[
+        { id:"t1", title:"How investment gains are taxed, basics", time:"15 min", hours:0.25, body:`
+          <p>Profit from selling an investment for more than you paid (capital gains) is usually taxable, often at a different (sometimes lower) rate if held long-term vs short-term. Exact rules vary heavily by country, so always check your local tax authority's official guidance or a tax professional before filing.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Search "[your country] capital gains tax stocks" and note the basic short-term vs long-term rates. Just knowing where to look this up is the actual skill here.</p></div>`,
+          quiz:[
+            {q:"What is a 'capital gain'?", options:["A type of stock","Profit from selling an investment for more than you paid","A bank fee","A government subsidy"], a:1},
+          ]},
+        { id:"t2", title:"Retirement accounts & compounding, explained simply", time:"20 min", hours:0.33, body:`
+          <p>Many countries offer tax-advantaged retirement accounts (like a pension fund or retirement savings plan) that let investments grow with reduced/delayed tax, rewarding long-term saving. Compounding = earning returns not just on your original money, but on the returns it already earned — which is why starting early, even with small amounts, matters more than starting later with more money.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 10 min</div>
+          <p>Search "compound interest calculator" (many free ones exist). Plug in a small monthly amount you could realistically save, an estimated yearly return (try 8%), and see the projected total after 10, 20, and 30 years. The gap between those numbers is the entire point of this lesson.</p></div>`,
+          quiz:[
+            {q:"What is 'compounding'?", options:["A one-time bonus","Earning returns on your returns, not just your original money","A type of tax","A government fee"], a:1},
+          ]},
+        { id:"t3", title:"Setting long-term financial goals", time:"15 min", hours:0.25, body:`
+          <p>Practical framework: define a goal (e.g. "own a home in 10 years"), estimate the amount needed, work backward to a monthly saving/investing target, and revisit the goal yearly as life changes. Vague goals ("be rich") are far less useful than specific, time-bound ones.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Write one real financial goal with a specific amount and a specific year (e.g. "save ₹2,00,000 by 2029"). Divide the amount by the number of months until then — that's your rough monthly target.</p></div>`,
+          quiz:[
+            {q:"What makes a financial goal more useful?", options:["Being vague, like 'be rich'","Being specific and time-bound, like a target amount by a target year","Never revisiting it","Ignoring your budget entirely"], a:1},
+          ]},
+      ]},
+      { title:"Building Your First Portfolio", lessons:[
+        { id:"po1", title:"Asset allocation basics", time:"15 min", hours:0.25, body:`
+          <p>Asset allocation = how you split your money across different investment types (stocks, bonds, cash, etc). Generally, more stocks = more growth potential but more short-term swings; more bonds/cash = more stability but slower growth. There's no single "right" split — it depends on your goals and how much short-term ups and downs you can handle.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Sketch a rough split for yourself right now, purely as a thought exercise: what % would you put in stocks vs bonds/cash, and why does that percentage feel right for your situation?</p></div>`,
+          quiz:[
+            {q:"What does 'asset allocation' mean?", options:["Picking one single stock","How you split money across different investment types","A type of tax form","A bank account type"], a:1},
+          ]},
+        { id:"po2", title:"Balancing risk vs growth by age/goals", time:"15 min", hours:0.25, body:`
+          <p>A common (not universal) rule of thumb: younger investors with a long time horizon can typically afford more risk (more stocks), since they have years to recover from downturns; those closer to needing the money (e.g. near retirement) often shift toward more stable investments. Your personal risk tolerance and specific goals matter as much as age.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Write down your own time horizon for your biggest financial goal (in years). Does the "more years = can typically afford more risk" rule of thumb feel right for your situation, or does your personal comfort with risk pull you the other way?</p></div>`,
+          quiz:[
+            {q:"Why might younger investors typically afford more risk?", options:["They have less money","They generally have more years to recover from downturns","Risk doesn't matter at any age","Younger investors can't lose money"], a:1},
+          ]},
+        { id:"po3", title:"Rebalancing a portfolio over time", time:"15 min", hours:0.25, body:`
+          <p>Over time, some investments grow faster than others, shifting your original allocation (e.g. your 70/30 stocks/bonds split might drift to 85/15 after a good year for stocks). Rebalancing means periodically adjusting back to your target split, either by selling some winners or directing new money toward the lagging category. Doing this yearly is a common simple approach.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Do the math: if you started at 70/30 stocks/bonds with ₹70,000/₹30,000, and stocks grew 20% while bonds grew 3%, what's the new split? (Work it out — this drift is exactly what rebalancing corrects.)</p></div>`,
+          quiz:[
+            {q:"What is 'rebalancing'?", options:["Selling all investments at once","Periodically adjusting your portfolio back to your target allocation","Never checking your portfolio","A type of tax"], a:1},
+          ]},
+      ]},
+      { title:"Common Investing Mistakes — Deep Dive", lessons:[
+        { id:"cm1", title:"Chasing past performance", time:"10 min", hours:0.17, body:`
+          <p>A fund or stock that performed great last year won't necessarily repeat it — markets often rotate. Buying purely because "it went up a lot recently" is one of the most common beginner mistakes; it's chasing what already happened, not what's likely to happen next.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Think of an investment, product, or trend you were tempted to jump into recently mainly because "everyone said it was doing great." Write one honest sentence about what actually drove that decision.</p></div>`,
+          quiz:[
+            {q:"Why is 'chasing past performance' risky?", options:["Past performance guarantees future results","Past performance doesn't guarantee future results","It's actually a safe strategy","It only applies to bonds"], a:1},
+          ]},
+        { id:"cm2", title:"Ignoring fees & expense ratios", time:"15 min", hours:0.25, body:`
+          <p>Mutual funds and investment platforms charge fees (an "expense ratio" as a % per year, plus sometimes trading/transaction fees). These seem small but compound over decades and can meaningfully reduce your returns. Always check the expense ratio before choosing between similar funds.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Find two similar funds (same category, e.g. two index funds) and compare their expense ratios side by side. Even a 0.5% difference is worth noticing — it compounds every single year you're invested.</p></div>`,
+          quiz:[
+            {q:"Why do small annual fees matter over time?", options:["They don't matter at all","They compound over decades and can meaningfully reduce returns","Fees are always removed after year one","They only apply to stocks, not funds"], a:1},
+          ]},
+        { id:"cm3", title:"Timing the market vs time in the market", time:"10 min", hours:0.17, body:`
+          <p>"Timing the market" (trying to buy at the exact bottom and sell at the exact top) is extremely difficult even for professionals. "Time in the market" — staying invested consistently over years — has historically been a more reliable path to growth for most people than trying to perfectly time entries and exits.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Write down: have you ever delayed a financial decision waiting for the "perfect moment"? What did that waiting actually cost you, in hindsight?</p></div>`,
+          quiz:[
+            {q:"What has historically been more reliable for most investors?", options:["Perfectly timing every buy and sell","Staying invested consistently over time","Investing only on Mondays","Avoiding the market entirely"], a:1},
+          ]},
+      ]},
+    ]
+  },
+
+  career: {
+    title:"Career & Digital Skills", icon:"◆", color:"#B39CFF", bg:"rgba(179,156,255,0.14)",
+    desc:"Using AI to get hired, freelance, build your brand, stay safe online, and manage your time.",
+    modules:[
+      { title:"Getting Hired with AI", lessons:[
+        { id:"k1", title:"AI-powered resume & interview prep", time:"20 min", hours:0.33, body:`
+          <p>AI chat assistants are excellent free resume and interview coaches if you guide them well. Paste your work/education history and ask: <em>"Rewrite this as concise, achievement-focused resume bullet points, using action verbs, for a [job title] role."</em></p>
+          <p>For interview prep, ask the AI to <strong>role-play as an interviewer</strong> for a specific job and question you one at a time, then give feedback on your answers. This works far better than reading generic tips — you actually practice.</p>
+          <div class="callout">💡 Always personalize AI-drafted resumes and cover letters with your real details and voice — generic AI text is easy for recruiters to spot and often screened out.</div>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 10 min</div>
+          <p>Open ChatGPT or Claude right now. Paste in one real job/project you've done and ask it to turn it into 2-3 sharp resume bullet points. Then ask it to role-play as an interviewer for a role you're interested in and answer its first question out loud or in writing.</p></div>`,
+          quiz:[
+            {q:"What's an effective way to prep for interviews using AI?", options:["Just reading generic online tips","Asking the AI to role-play as an interviewer and give feedback on your answers","Avoiding AI entirely","Memorizing the AI's own answers word for word"], a:1},
+            {q:"Why should you personalize AI-drafted resumes?", options:["It's not necessary","Generic AI text is easy to spot and often gets screened out","AI resumes are always rejected","Personalizing is illegal"], a:1},
+          ]},
+      ]},
+      { title:"Freelancing & Remote Work Basics", lessons:[
+        { id:"fr1", title:"Finding your first freelance client", time:"15 min", hours:0.25, body:`
+          <p>Start with people/networks you already have access to (friends, local businesses, online communities in your skill area) rather than only cold-applying on big platforms. Build 1-2 solid portfolio pieces first (even unpaid/practice projects) so you have something concrete to show.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>List 5 people or local businesses you already know who might need something you can do. You don't have to contact anyone yet — just prove to yourself the network already exists.</p></div>`,
+          quiz:[
+            {q:"What's a good first step to find freelance clients?", options:["Only apply on huge platforms with heavy competition","Start with your existing network and build a small portfolio first","Wait until you're an expert","Avoid showing any past work"], a:1},
+          ]},
+        { id:"fr2", title:"Pricing your work fairly", time:"15 min", hours:0.25, body:`
+          <p>Beginners often underprice out of fear of losing the client — but pricing too low can attract clients who don't respect your time and makes raising rates later harder. Research what others with similar skill/experience charge, and consider starting with a slightly lower "portfolio-building" rate on your first few projects, with a plan to raise it.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Search "[your skill] freelance rates beginner" and note the typical range. Pick a starting number for yourself and write down when you'll revisit and raise it (e.g. "after my first 3 projects").</p></div>`,
+          quiz:[
+            {q:"What's a risk of pricing your work too low as a beginner?", options:["No risk at all","It can attract clients who don't respect your time and makes raising rates harder later","It always leads to more clients","It's illegal"], a:1},
+          ]},
+        { id:"fr3", title:"Popular freelance platforms compared", time:"15 min", hours:0.25, body:`
+          <p>Upwork/Fiverr: large marketplaces, lots of competition, steady demand. Niche communities/job boards specific to your skill: often less competition, better-fit clients. Direct outreach (contacting businesses yourself): usually earns the best rates but takes more effort upfront.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Browse one platform (Upwork, Fiverr, or a niche board in your skill area) for 5 minutes. Note 2-3 job postings that look realistic for your current skill level.</p></div>`,
+          quiz:[
+            {q:"What's a benefit of niche job boards over large general platforms?", options:["No benefit","Often less competition and better-fit clients","They always pay more automatically","They require no skills"], a:1},
+          ]},
+        { id:"fr4", title:"Getting paid safely across borders", time:"10 min", hours:0.17, body:`
+          <p>Use established payment platforms (like the freelance site's built-in escrow/payment protection) rather than accepting payment entirely outside the platform for a first-time client — this protects you if a client tries not to pay. Watch for common scams: requests to pay "extra fees" first, checks/payments for more than agreed, or upfront demands for sensitive personal financial documents.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Write down the 3 scam warning signs from this lesson in your own words, so they actually stick in memory rather than just being read once.</p></div>`,
+          quiz:[
+            {q:"What's a common freelance payment scam pattern?", options:["A client paying through the platform's protected system","A client asking you to pay 'extra fees' first, or overpaying then asking for a refund","A client leaving a positive review","A client asking about your availability"], a:1},
+          ]},
+      ]},
+      { title:"Personal Branding & LinkedIn", lessons:[
+        { id:"pb1", title:"Writing a strong LinkedIn profile", time:"15 min", hours:0.25, body:`
+          <p>Focus on a clear headline describing what you actually do/want to do (not just a job title), a photo, and an "About" section written like you're introducing yourself to a person, not a resume dump. List concrete skills and, if you have them, links to real projects.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 10 min</div>
+          <p>Write a one-line LinkedIn headline for yourself right now, describing what you do or want to do (not just a job title). If you have a profile already, compare it to this and update it.</p></div>`,
+          quiz:[
+            {q:"What should a LinkedIn 'About' section sound like?", options:["A formal resume dump","A genuine introduction of yourself to a person","A list of unrelated hobbies only","Empty, left blank"], a:1},
+          ]},
+        { id:"pb2", title:"Building a portfolio that gets noticed", time:"15 min", hours:0.25, body:`
+          <p>A portfolio should show your best 3-5 pieces of work with a short explanation of your role and the outcome, not everything you've ever made. For beginners without paid work yet, personal or practice projects (like the ones built through this app) count — completed and explained well beats unfinished and impressive-sounding.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>List 3 real things you could show right now — even the Budget Tracker app or profile webpage from the Coding track count. For each, write one sentence explaining what it does and what you learned.</p></div>`,
+          quiz:[
+            {q:"What matters most in a portfolio shown to others?", options:["Quantity of items, however unfinished","A few well-explained, completed pieces of work","Only paid work counts","Never explaining your role"], a:1},
+          ]},
+        { id:"pb3", title:"Networking without feeling awkward", time:"15 min", hours:0.25, body:`
+          <p>Practical approach: engage genuinely with others' posts/work before asking for anything, reach out with a specific, low-pressure question rather than a vague "can we connect," and follow up on real conversations rather than mass-messaging strangers. Networking works best as a long-term habit, not a one-time ask when you need something.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Draft (don't have to send it) one specific, low-pressure message you could send someone in your field — a real question about their work, not a vague "let's connect."</p></div>`,
+          quiz:[
+            {q:"What's a more effective networking approach?", options:["Mass-messaging strangers with vague requests","Engaging genuinely first, then asking specific, low-pressure questions","Only reaching out when you need something","Avoiding all outreach"], a:1},
+          ]},
+      ]},
+      { title:"Cybersecurity & Digital Safety", lessons:[
+        { id:"cy1", title:"Spotting phishing scams", time:"15 min", hours:0.25, body:`
+          <p>Phishing = fake messages (email/SMS/calls) pretending to be a trusted source to steal your info or money. Warning signs: urgent pressure ("act now or your account is locked"), requests for passwords/OTPs (real companies never ask for these), mismatched sender addresses, and links that don't match the real company's domain when you hover/check them.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Check your email's spam/junk folder right now for one message. See how many of this lesson's warning signs it actually shows — urgent pressure, mismatched sender, suspicious link.</p></div>`,
+          quiz:[
+            {q:"What should real companies never ask you for directly?", options:["Your name","Your password or OTP","Your email address","Your general feedback"], a:1},
+          ]},
+        { id:"cy2", title:"Password managers & 2-factor authentication", time:"15 min", hours:0.25, body:`
+          <p>A password manager (many free options exist) generates and stores strong, unique passwords for every account, so one leaked password doesn't compromise everything else. 2-factor authentication (2FA) adds a second check (like a code sent to your phone) beyond just your password — turn it on for email, banking, and any financial accounts especially.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Check whether 2FA is turned on for your email account right now. If it isn't, turn it on — this single action meaningfully improves your security today.</p></div>`,
+          quiz:[
+            {q:"Why is a unique password per account important?", options:["It's not important","So one leaked password doesn't compromise all your other accounts","It makes logins slower on purpose","It's required by every website"], a:1},
+          ]},
+        { id:"cy3", title:"Protecting your data on public Wi-Fi", time:"10 min", hours:0.17, body:`
+          <p>Public Wi-Fi (cafes, libraries) is often unencrypted, meaning others on the same network could potentially intercept unprotected traffic. Avoid logging into banking or entering sensitive info on public Wi-Fi when possible; if you must, make sure the site uses "https" (look for the padlock icon), or use a trusted VPN.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Open your banking app or website right now (on any network) and check for the padlock icon or "https" in the address bar — get in the habit of glancing for this every time.</p></div>`,
+          quiz:[
+            {q:"What should you avoid doing on public Wi-Fi when possible?", options:["Reading news","Online banking or entering sensitive information","Checking the weather","Browsing a map"], a:1},
+          ]},
+        { id:"cy4", title:"Safe online banking habits", time:"10 min", hours:0.17, body:`
+          <p>Only access banking through the official app or by typing the bank's URL directly (never through a link in an email/SMS). Turn on transaction alerts so you're notified immediately of any activity. Never share OTPs or PINs with anyone, including people claiming to be "bank support."</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Check your banking app's settings for transaction alerts. If they're off, turn them on now — it's the fastest way to catch unauthorized activity early.</p></div>`,
+          quiz:[
+            {q:"Should you ever share an OTP with someone claiming to be bank support?", options:["Yes, always", "No — legitimate bank support never needs your OTP","Only if they call you","Only over email"], a:1},
+          ]},
+      ]},
+      { title:"Time Management & Productivity Tools", lessons:[
+        { id:"tm1", title:"Using AI to plan your week", time:"15 min", hours:0.25, body:`
+          <p>Give an AI assistant your tasks, deadlines, and available hours, and ask it to draft a realistic weekly schedule, flagging anything that looks overloaded. It won't know your energy levels or unexpected interruptions, so treat its plan as a flexible draft, not a rigid rulebook.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 10 min</div>
+          <p>List your real tasks and deadlines for this week, then ask ChatGPT or Claude to turn them into a realistic daily schedule. Adjust anything that doesn't match your actual energy or free time.</p></div>`,
+          quiz:[
+            {q:"How should you treat an AI-generated weekly schedule?", options:["As a rigid, unchangeable rulebook","As a flexible draft to adjust to real life","Ignore it completely","Follow it even if it's clearly overloaded"], a:1},
+          ]},
+        { id:"tm2", title:"Free tools for task management", time:"15 min", hours:0.25, body:`
+          <p>Simple free options: a basic to-do list app (many phones have one built in), Google Calendar for time-blocking, or a free Notion/Trello board for organizing bigger projects into steps. The best tool is the simplest one you'll actually keep using — don't over-invest in a complex system before you've tested a simple one.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Open whatever to-do or calendar app is already on your phone and add your top 3 priorities for tomorrow. No new app installs needed — just start using what's already there.</p></div>`,
+          quiz:[
+            {q:"What's the best productivity tool for most beginners?", options:["The most complex, feature-rich one available","The simplest one you'll actually keep using consistently","Whichever costs the most","None, tools don't help"], a:1},
+          ]},
+        { id:"tm3", title:"Avoiding burnout while self-learning", time:"10 min", hours:0.17, body:`
+          <p>Learning a lot of new skills (like everything in this app) is exciting but can lead to burnout if you try to do it all at once. Practical guardrails: pick one track/module at a time rather than jumping between all of them, take real breaks, and celebrate finishing a lesson instead of only focusing on how much is left.</p>
+          <div class="exercise"><div class="ex-label">🎯 Try it yourself · 5 min</div>
+          <p>Look at your Passport tab. Pick ONE track to focus on for the next week, and decide on one small reward for yourself after finishing your next 3 lessons in it.</p></div>`,
+          quiz:[
+            {q:"What's a good guardrail against self-learning burnout?", options:["Study every track simultaneously with no breaks","Focus on one track/module at a time and take real breaks","Never celebrate small progress","Avoid setting any structure"], a:1},
+          ]},
+      ]},
+    ]
+  }
+};
+
+/* =================================================================
+   HOURS / PROGRESS HELPERS
+================================================================= */
+function flattenLessons(trackKey){ return TRACKS[trackKey].modules.flatMap(m=>m.lessons); }
+function fmtHours(n){ return Math.round(n * 10) / 10; }
+function trackHours(trackKey){ return fmtHours(flattenLessons(trackKey).reduce((s,l)=>s+l.hours,0)); }
+function allLessons(){ return Object.keys(TRACKS).flatMap(k=>flattenLessons(k).map(l=>({...l, trackKey:k, trackColor:TRACKS[k].color}))); }
+function grandTotalHours(){ return fmtHours(Object.keys(TRACKS).reduce((s,k)=>s+flattenLessons(k).reduce((s2,l)=>s2+l.hours,0),0)); }
+function trackDoneCount(key){ return flattenLessons(key).filter(l=>progress.completedLessons.includes(l.id)).length; }
+
+/* =================================================================
+   STATE + STORAGE
+================================================================= */
+let state = { tab:"home", track:null, lesson:null, quizIndex:0, quizScore:0 };
+let progress = { completedLessons:[], quizScores:{} };
+
+async function loadProgress(){
+  try{ const res = await window.storage.get('seekho-progress'); if(res && res.value) progress = JSON.parse(res.value); }
+  catch(e){ /* first use, no saved progress yet */ }
+  render();
+}
+async function saveProgress(){
+  try{ await window.storage.set('seekho-progress', JSON.stringify(progress)); }
+  catch(e){ console.error('save failed', e); }
+}
+
+/* =================================================================
+   RENDER
+================================================================= */
+const app = document.getElementById('app');
+
+function render(){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active', t.dataset.tab===state.tab));
+  if(state.tab==='home') return renderHome();
+  if(state.tab==='learn'){
+    if(state.lesson) return renderLesson();
+    if(state.track) return renderLessonList();
+    return renderTrackPicker();
+  }
+  if(state.tab==='progress') return renderProgress();
+}
+
+function trackCard(key, t){
+  const done = trackDoneCount(key), tot = flattenLessons(key).length;
+  return `
+    <div class="track-card" data-goto="${key}">
+      <div class="track-icon" style="background:${t.bg}; color:${t.color};">${t.icon}</div>
+      <div class="track-body">
+        <div class="track-title">${t.title}</div>
+        <div class="track-desc">${t.desc}</div>
+        <div class="track-hours">${trackHours(key)} hrs · ${tot} lessons, all open now</div>
+        <div class="track-progress-wrap"><div class="track-progress-bar" style="width:${(done/tot*100)||0}%; background:${t.color};"></div></div>
+      </div>
+      <div class="chev">›</div>
+    </div>`;
+}
+
+function renderHome(){
+  const done = progress.completedLessons.length;
+  const totalAvail = allLessons().length;
+  app.innerHTML = `
+    <div class="hero">
+      <div class="hero-eyebrow">Welcome</div>
+      <h1>A whole curriculum — free, forever.</h1>
+      <p>AI tools, real coding from install to shipped app, and how money & markets actually work. No paywalls, no API costs. Every lesson is open — learn in whatever order you like.</p>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="n">${grandTotalHours()}+</div><div class="l">total hours</div></div>
+        <div class="hero-stat"><div class="n">${totalAvail}</div><div class="l">lessons</div></div>
+        <div class="hero-stat"><div class="n">${done}/${totalAvail}</div><div class="l">completed</div></div>
+      </div>
+    </div>
+    <div class="section-label">Your tracks</div>
+    ${Object.entries(TRACKS).map(([key,t])=>trackCard(key,t)).join('')}
+  `;
+  app.querySelectorAll('[data-goto]').forEach(el=>el.onclick=()=>{
+    state.tab='learn'; state.track=el.dataset.goto; state.lesson=null; render();
+  });
+}
+
+function renderTrackPicker(){
+  app.innerHTML = `
+    <div class="section-label" style="margin-top:16px;">Choose a track</div>
+    ${Object.entries(TRACKS).map(([key,t])=>trackCard(key,t)).join('')}
+  `;
+  app.querySelectorAll('[data-goto]').forEach(el=>el.onclick=()=>{ state.track=el.dataset.goto; render(); });
+}
+
+function renderLessonList(){
+  const t = TRACKS[state.track];
+  const doneIds = progress.completedLessons;
+  let idx = 0;
+  const modulesHtml = t.modules.map(m=>{
+    const rows = m.lessons.map(l=>{
+      idx++;
+      const done = doneIds.includes(l.id);
+      return `
+        <div class="lesson-row" data-lesson="${l.id}">
+          <div class="lesson-num ${done?'done':''}">${done?'✓':idx}</div>
+          <div style="flex:1"><div class="lesson-title">${l.title}</div><div class="lesson-time">${l.time}</div></div>
+          <div class="chev">›</div>
+        </div>`;
+    }).join('');
+    return `<div class="module-label">${m.title} <span class="badge">${m.lessons.reduce((s,l)=>s+l.hours,0)} hrs</span></div>${rows}`;
+  }).join('');
+
+  app.innerHTML = `
+    <div class="backrow" id="back"><span class="arrow">←</span><span class="label">All tracks</span></div>
+    <div class="track-header">
+      <h2>${t.title}</h2>
+      <p>${t.desc}</p>
+      <div class="hourline">${trackHours(state.track)} hrs · every lesson open now, any order</div>
+    </div>
+    ${modulesHtml}
+  `;
+  document.getElementById('back').onclick=()=>{ state.track=null; render(); };
+  app.querySelectorAll('[data-lesson]').forEach(el=>el.onclick=()=>{
+    state.lesson = el.dataset.lesson; state.quizIndex=0; state.quizScore=0; render();
+  });
+}
+
+function getLesson(){ return flattenLessons(state.track).find(l=>l.id===state.lesson); }
+
+function renderLesson(){
+  const l = getLesson();
+  app.innerHTML = `
+    <div class="backrow" id="back"><span class="arrow">←</span><span class="label">${TRACKS[state.track].title}</span></div>
+    <div class="lesson-content">
+      <div class="lesson-eyebrow">${TRACKS[state.track].title} · ${l.time}</div>
+      <h2>${l.title}</h2>
+      <div class="body">${l.body}</div>
+      <button class="btn" id="startQuiz">Take the quiz →</button>
+    </div>`;
+  document.getElementById('back').onclick=()=>{ state.lesson=null; render(); };
+  document.getElementById('startQuiz').onclick=()=>{ state.quizIndex=0; state.quizScore=0; render_quiz(); };
+}
+
+function render_quiz(){
+  const l = getLesson();
+  if(state.quizIndex >= l.quiz.length) return renderQuizResult();
+  const q = l.quiz[state.quizIndex];
+  app.innerHTML = `
+    <div class="lesson-content">
+      <div class="quiz-progress">Question ${state.quizIndex+1} of ${l.quiz.length}</div>
+      <div class="quiz-q">${q.q}</div>
+      <div id="opts">${q.options.map((o,i)=>`<button class="option" data-i="${i}">${o}</button>`).join('')}</div>
+    </div>`;
+  document.querySelectorAll('.option').forEach(btn=>{
+    btn.onclick=()=>{
+      const i = parseInt(btn.dataset.i);
+      document.querySelectorAll('.option').forEach(b=>b.disabled=true);
+      if(i===q.a){ btn.classList.add('correct'); state.quizScore++; }
+      else{ btn.classList.add('wrong'); document.querySelectorAll('.option')[q.a].classList.add('correct'); }
+      setTimeout(()=>{ state.quizIndex++; render_quiz(); }, 900);
+    };
+  });
+}
+
+async function renderQuizResult(){
+  const l = getLesson();
+  const total = l.quiz.length;
+  const passed = state.quizScore >= Math.ceil(total*0.6);
+  if(passed && !progress.completedLessons.includes(l.id)){
+    progress.completedLessons.push(l.id);
+    progress.quizScores[l.id] = state.quizScore + '/' + total;
+    await saveProgress();
+  }
+  app.innerHTML = `
+    <div class="result-stamp">
+      <div class="stamp-circle"><div class="score">${state.quizScore}/${total}</div><div class="of">SCORE</div></div>
+      <h2 style="font-size:20px;">${passed ? 'Lesson complete! 🎉' : 'Almost there'}</h2>
+      <p style="color:var(--muted); font-size:13px; margin-top:8px; padding:0 10px;">
+        ${passed ? 'Nice work — jump to any other lesson whenever you like.' : 'You need 60% to earn the stamp for this one. Review and try again whenever you like.'}
+      </p>
+      <button class="btn" id="continueBtn">Back to lessons</button>
+      <button class="btn secondary" id="retryBtn">Retake quiz</button>
+    </div>`;
+  document.getElementById('continueBtn').onclick=()=>{ state.lesson=null; render(); };
+  document.getElementById('retryBtn').onclick=()=>{ state.quizIndex=0; state.quizScore=0; render_quiz(); };
+}
+
+function renderProgress(){
+  const all = allLessons();
+  const done = progress.completedLessons.length;
+  const total = all.length;
+  app.innerHTML = `
+    <div class="passport-head">
+      <h2>Your learning passport</h2>
+      <p>${done} of ${total} stamps collected — across a ${grandTotalHours()}+ hour curriculum.</p>
+    </div>
+    <div class="roadmap-bar">
+      ${Object.entries(TRACKS).map(([key,t])=>{
+        const d = trackDoneCount(key), tot = flattenLessons(key).length;
+        return `<div class="row"><span>${t.title}</span><span>${d}/${tot} lessons</span></div>
+        <div class="track-mini"><div style="width:${(d/tot*100)||0}%; background:${t.color};"></div></div>`;
+      }).join('')}
+    </div>
+    <div class="stamp-grid">
+      ${all.map(l=>{
+        const earned = progress.completedLessons.includes(l.id);
+        return `<div class="stamp-tile ${earned?'earned':''}" style="${earned?`border-color:${l.trackColor}; background:${l.trackColor}22;`:''}">
+          <div class="emoji">${earned?'✅':'○'}</div><div>${l.title}</div></div>`;
+      }).join('')}
+    </div>`;
+}
+
+/* NAV */
+document.querySelectorAll('.tab').forEach(btn=>{
+  btn.onclick=()=>{ state.tab = btn.dataset.tab; render(); };
+});
+
+loadProgress();
+
+/* Register service worker for offline support + installability */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(err => console.log('SW registration failed:', err));
+  });
+}
+</script>
+</body>
+</html>
 
