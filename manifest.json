@@ -1,0 +1,25 @@
+{
+  "name": "Seekho — Learn AI, Code & Money",
+  "short_name": "Seekho",
+  "description": "Free, offline-capable curriculum covering AI tools, coding, and investing — no ads, no subscriptions.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#12213F",
+  "theme_color": "#12213F",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
